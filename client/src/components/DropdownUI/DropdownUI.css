@@ -1,0 +1,51 @@
+.dropdown-ui {
+  display: flex;
+  gap: 40px; /* Space between dropdown sections */
+  justify-content: center; /* Center the dropdowns horizontally */
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-title {
+  display: flex; /* Align icon and text horizontally */
+  align-items: center; /* Center align icon and text vertically */
+  gap: 10px; /* Space between icon and title text */
+  width: 330px;
+  padding: 12px 18px;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  text-align: center;
+  cursor: default;
+}
+
+.dropdown-list {
+  margin-top: 10px;
+  margin-left: 20px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 295px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  list-style: none;
+}
+
+.dropdown-item {
+  display: flex; /* Align icon and text horizontally */
+  align-items: center; /* Center align icon and text vertically */
+  gap: 10px; /* Space between icon and content text */
+  padding: 12px 18px;
+  font-size: 17px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: black;
+  color: white;
+}
