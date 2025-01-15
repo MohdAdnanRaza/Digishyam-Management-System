@@ -1,16 +1,29 @@
 const express = require("express");
 const {
-  sendOtp,
-  loginOtp,
-  loginPassword,
   signup,
-  verifyOtp,
+  login,
+  editUser,
+  deleteUser,
+  getProfile,
 } = require("../controllers/authController");
+const user = require("../models/User");
+const verifyToken = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.post("/signup", signup);
-router.post("/verify-otp", verifyOtp);
-router.post("/send-otp", sendOtp); // To send OTP for login
-router.post("/login-otp", loginOtp); // To login using OTP
-router.post("/login-password", loginPassword);
+// router.post("/verify-signup", verifyOtpSignup);
+router.post("/login", login);
+// router.post("/verify-login", verifyOtpLogin);
+router.put("/edit/:id", editUser); // Route for editing user
+router.delete("/delete/:id", deleteUser); // Route for deleting user
+router.get("/team", async (req, res) => {
+  try {
+    const team = await user.find(); // Fetch all team members from the database
+    res.status(200).json(team); // Send the team data as a response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching team data" });
+  }
+});
+router.get("/profile", verifyToken, getProfile);
 module.exports = router;

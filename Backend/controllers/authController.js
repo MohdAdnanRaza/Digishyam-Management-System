@@ -1,153 +1,120 @@
 const bcrypt = require("bcryptjs");
-const User = require("../models/User");
-const emailTransporter = require("../config/emailTransporter");
 const jwt = require("jsonwebtoken");
-exports.signup = async (req, res) => {
+const user = require("../models/User");
+const User = require("../models/User");
+
+//Register api
+const signup = async (req, res) => {
   try {
-    const { name, mobile, email, password } = req.body;
+    const { name, email, mobile, password, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-    const user = new User({
+    const newUser = new User({
       name,
-      mobile,
       email,
+      mobile,
       password: hashedPassword,
-      otp,
+      role,
     });
-    await user.save();
-
-    await emailTransporter.sendMail({
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Your OTP Code",
-      text: `Your OTP code is ${otp}`,
-    });
-
-    res.json({ success: true, message: "OTP sent" });
+    await newUser.save();
+    res.status(201).json({ message: `User registered with name $(name)` });
   } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Error during signup",
-      error: err.message,
-    });
+    res.status(500).json({ message: `Something went wrong` });
   }
 };
 
-exports.verifyOtp = async (req, res) => {
-  try {
-    const { mobile, otp } = req.body;
-    const user = await User.findOne({ mobile });
+//Login api
 
-    if (user && user.otp === otp) {
-      user.otp = null;
-      await user.save();
-      res.json({ success: true, message: "OTP verified" });
-    } else {
-      res.status(400).json({ success: false, message: "Invalid OTP" });
-    }
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Error during OTP verification",
-      error: err.message,
-    });
-  }
-};
-// Send OTP to user's mobile number
-exports.sendOtp = async (req, res) => {
+const login = async (req, res) => {
   try {
-    const { mobile } = req.body;
-    const user = await User.findOne({ mobile });
-
-    if (!user) {
+    const { email, password } = req.body;
+    const Users = await user.findOne({ email });
+    if (!Users) {
       return res
-        .status(400)
-        .json({ success: false, message: "User not found" });
+        .status(404)
+        .json({ message: `user with name ${email} not found` });
     }
-
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    user.otp = otp;
-    await user.save();
-
-    // Send OTP to user (you can integrate an SMS service here)
-    await emailTransporter.sendMail({
-      from: process.env.EMAIL,
-      to: user.email,
-      subject: "Your OTP Code",
-      text: `Your OTP code is ${otp}`,
-    });
-
-    res.json({ success: true, message: "OTP sent successfully" });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Error sending OTP",
-      error: err.message,
-    });
-  }
-};
-
-// Login with OTP
-exports.loginOtp = async (req, res) => {
-  try {
-    const { mobile, otp } = req.body;
-    const user = await User.findOne({ mobile });
-
-    if (!user || user.otp !== otp) {
-      return res.status(400).json({ success: false, message: "Invalid OTP" });
-    }
-
-    user.otp = null; // OTP used, so set it to null
-    await user.save();
-
-    // Generate JWT Token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.json({ success: true, message: "Login successful", token });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Error during OTP login",
-      error: err.message,
-    });
-  }
-};
-
-// Login with password
-exports.loginPassword = async (req, res) => {
-  try {
-    const { mobile, password } = req.body;
-    const user = await User.findOne({ mobile });
-
-    if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
+    const isMatch = await bcrypt.compare(password, Users.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+      return res.status(400).json({ message: `Invalid credentials` });
+    }
+    const token = jwt.sign(
+      { id: Users._id, role: Users.role, name: Users.name },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.status(200).json({ token });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+// Edit User
+const editUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+    const { name, mobile, email, role } = req.body;
+
+    const validRoles = ["staff", "client", "admin"];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ message: "Invalid role value" });
     }
 
-    // Generate JWT Token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const updatedUser = await user.findByIdAndUpdate(
+      id,
+      { name, mobile, email, role },
+      { new: true } // Returns the updated document
+    );
 
-    res.json({ success: true, message: "Login successful", token });
-  } catch (err) {
-    console.error("Error during OTP login:", err);
-    res.status(500).json({
-      success: false,
-      message: "Error during password login",
-      error: err.message,
-    });
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "User updated successfully", updatedUser });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating user", error: error.message });
   }
+};
+
+// Delete User
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedUser = await user.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting user", error: error.message });
+  }
+};
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming `req.user` contains decoded token info
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching profile", error: error.message });
+  }
+};
+module.exports = {
+  getProfile,
+  signup,
+  login,
+  editUser,
+  deleteUser,
 };
