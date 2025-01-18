@@ -25,7 +25,8 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AdminNavbar from "./AdminNavbar";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const AddStudent = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -44,7 +45,7 @@ const AddStudent = () => {
         setStudents(response.data);
       } catch (error) {
         console.error(error);
-        alert("Error fetching students");
+        toast.error("Error fetching students");
       }
     };
     fetchStudents();
@@ -79,7 +80,7 @@ const AddStudent = () => {
             student._id === editing._id ? { ...student, ...formData } : student
           )
         );
-        alert("Student updated successfully!");
+        toast.success("Student updated successfully!");
       } else {
         const response = await axios.post(
           "http://localhost:4000/api/students",
@@ -89,12 +90,12 @@ const AddStudent = () => {
           ...prev,
           { ...formData, id: response.data._id },
         ]);
-        alert("Student added successfully!");
+        toast.success("Student added successfully!");
       }
       handleClose();
     } catch (error) {
       console.error(error);
-      alert("Error saving student");
+      toast.error("Error saving student");
     }
   };
 
@@ -108,10 +109,10 @@ const AddStudent = () => {
     try {
       await axios.delete(`http://localhost:4000/api/students/${id}`);
       setStudents((prev) => prev.filter((student) => student._id !== id));
-      alert("Student deleted successfully!");
+      toast.success("Student deleted successfully!");
     } catch (error) {
       console.error(error);
-      alert("Error deleting student");
+      toast.error("Error deleting student");
     }
   };
 
@@ -133,7 +134,7 @@ const AddStudent = () => {
           </Button>
           <TableContainer component={Paper} sx={{ mt: 3 }}>
             <Table>
-              <TableHead>
+              <TableHead sx={{ backgroundColor: "primary.main" }}>
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Mobile</TableCell>
@@ -227,6 +228,7 @@ const AddStudent = () => {
           </Dialog>
         </Box>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/ContextProvider"; // Ensure this provides the `user` object
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddLeave = () => {
   const { user } = useAuth(); // Retrieve the user object from context
@@ -34,7 +36,7 @@ const AddLeave = () => {
     e.preventDefault();
 
     if (!user) {
-      alert("User not logged in. Please log in to continue.");
+      toast("User not logged in. Please log in to continue.");
       return;
     }
 
@@ -56,14 +58,14 @@ const AddLeave = () => {
       );
 
       if (response.data.success) {
-        alert("Leave added successfully!");
-        navigate("/staff/leave");
+        toast.success("Leave added successfully!");
+        setTimeout(() => navigate("/staff/leave"), 2000);
       } else {
-        alert(response.data.error || "Failed to add leave.");
+        toast.error(response.data.error || "Failed to add leave.");
       }
     } catch (error) {
       console.error("Error adding leave:", error);
-      alert(error.response?.data?.error || "An error occurred.");
+      toast.error(error.response?.data?.error || "An error occurred.");
     }
   };
 
@@ -145,6 +147,7 @@ const AddLeave = () => {
           </button>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,164 +1,267 @@
-// import React, { useState } from "react";
-// import { FaList } from "react-icons/fa";
-// import { MdGridView } from "react-icons/md";
-// import { useParams } from "react-router-dom";
-// import { IoMdAdd } from "react-icons/io";
-// import { tasks } from "../../../assets/data";
-// import Tabs from "../../Tabs";
-// import Loading from "../../Loader";
-// import TaskTitle from "../../TaskTitle";
-// import BoardView from "../../BoardView";
-// import AddTask from "./AddTask";
-// import Table from "./Table";
-// import Title from "../../Title";
-// import Button from "../../Button";
-// import AdminNavbar from "../AdminNavbar";
-// const TABS = [
-//   { title: "Board View", icon: <MdGridView /> },
-//   { title: "List View", icon: <FaList /> },
-// ];
-
-// const TASK_TYPE = {
-//   todo: "bg-blue-600",
-//   "in progress": "bg-yellow-600",
-//   completed: "bg-green-600",
-// };
-
-// const CreateTask = () => {
-//   const params = useParams();
-
-//   const [selected, setSelected] = useState(0);
-//   const [open, setOpen] = useState(false);
-//   const [loading, setLoading] = useState(false);
-
-//   const status = params?.status || "";
-
-//   return loading ? (
-//     <div className="py-10">
-//       <Loading />
-//     </div>
-//   ) : (
-//     <div className="w-[1000px] mt-[30%] mr-20 ">
-//       <div className="flex items-center justify-between mb-4">
-//         <Title title={status ? `${status} Tasks` : "Tasks"} />
-
-//         {!status && (
-//           <Button
-//             onClick={() => setOpen(true)}
-//             label="Create Task"
-//             icon={<IoMdAdd className="text-lg" />}
-//             className="flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md py-2 2xl:py-2.5 "
-//           />
-//         )}
-//       </div>
-
-//       <Tabs tabs={TABS} setSelected={setSelected}>
-//         {!status && (
-//           <div className="w-full flex justify-between gap-4 md:gap-x-12 py-4 ">
-//             <TaskTitle label="To Do" className={TASK_TYPE.todo} />
-//             <TaskTitle
-//               label="In Progress"
-//               className={TASK_TYPE["in progress"]}
-//             />
-//             <TaskTitle label="completed" className={TASK_TYPE.completed} />
-//           </div>
-//         )}
-
-//         {selected !== 1 ? (
-//           <BoardView tasks={tasks} />
-//         ) : (
-//           <div className="w-full">
-//             <Table tasks={tasks} />
-//           </div>
-//         )}
-//       </Tabs>
-//       {/* <div style={{ position: "absolute", top: "4%", background: "black" }}>
-//         <AdminNavbar />
-//       </div> */}
-//       <AddTask open={open} setOpen={setOpen} />
-//     </div>
-//   );
-// };
-
-// export default CreateTask;
-import React, { useState } from "react";
-import { FaList } from "react-icons/fa";
-import { MdGridView } from "react-icons/md";
-import { useParams } from "react-router-dom";
-import { IoMdAdd } from "react-icons/io";
-import { tasks } from "../../../assets/data";
-import Tabs from "../../Tabs";
-import Loading from "../../Loader";
-import TaskTitle from "../../TaskTitle";
-import BoardView from "../../BoardView";
-import AddTask from "./AddTask";
-import Table from "./Table";
-import Title from "../../Title";
-import Button from "../../Button";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import AdminNavbar from "../AdminNavbar";
-const TABS = [
-  { title: "Board View", icon: <MdGridView /> },
-  { title: "List View", icon: <FaList /> },
-];
-
-const TASK_TYPE = {
-  todo: "bg-blue-600",
-  "in progress": "bg-yellow-600",
-  completed: "bg-green-600",
-};
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const CreateTask = () => {
-  const params = useParams();
+  const [tasks, setTasks] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [isCreatingTask, setIsCreatingTask] = useState(false);
+  const [isAssigningTask, setIsAssigningTask] = useState(false);
 
-  const [selected, setSelected] = useState(0);
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [taskForm, setTaskForm] = useState({
+    title: "",
+    description: "",
+    date: "",
+    priority: "NORMAL",
+  });
 
-  const status = params?.status || "";
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [selectedTask, setSelectedTask] = useState("");
+  const [isAssigning, setIsAssigning] = useState(false);
 
-  return loading ? (
-    <div className="py-10">
-      <Loading />
-    </div>
-  ) : (
-    <div className="w-[1000px]  mt-14  mr-20 ">
-      <div className="flex items-center justify-between mb-4">
-        <Title title={status ? `${status} Tasks` : "Tasks"} />
+  // Fetch tasks
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/api/tasks");
+      setTasks(response.data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      setTasks([]);
+    }
+  };
 
-        {!status && (
-          <Button
-            onClick={() => setOpen(true)}
-            label="Create Task"
-            icon={<IoMdAdd className="text-lg" />}
-            className="flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md py-2 2xl:py-2.5 "
-          />
-        )}
-      </div>
+  // Fetch employees
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/api/auth/team");
+      setEmployees(response.data);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+      setEmployees([]);
+    }
+  };
 
-      <Tabs tabs={TABS} setSelected={setSelected}>
-        {/* Static section for task titles */}
-        {!status && (
-          <div className="w-full flex justify-between gap-4 md:gap-x-12 py-4 ">
-            <TaskTitle label="To Do" className={TASK_TYPE.todo} />
-            <TaskTitle
-              label="In Progress"
-              className={TASK_TYPE["in progress"]}
+  // Create a new task
+  const createTask = async () => {
+    if (!taskForm.title || !taskForm.date) {
+      alert("Title and Date are required!");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/tasks",
+        taskForm
+      );
+      setTasks((prev) => [...prev, response.data]);
+      toast.success("Task created successfully!");
+      setIsCreatingTask(false);
+      setTaskForm({ title: "", description: "", date: "", priority: "NORMAL" });
+    } catch (error) {
+      console.error("Error creating task:", error);
+      toast.error("Failed to create task. Please try again.");
+    }
+  };
+
+  // Assign task to employee
+  const assignTask = async () => {
+    if (!selectedTask || !selectedEmployee) {
+      alert("Please select both a task and an employee.");
+      return;
+    }
+
+    setIsAssigning(true);
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/tasks/assign/${selectedTask}`,
+        {
+          userId: selectedEmployee,
+        }
+      );
+      toast.success("Task assigned successfully!");
+
+      // After successful assignment, re-fetch the tasks to update the list
+      fetchTasks();
+
+      setSelectedTask("");
+      setSelectedEmployee("");
+    } catch (error) {
+      console.error("Error assigning task:", error);
+      toast.error("Failed to assign task. Please try again.");
+    } finally {
+      setIsAssigning(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks(); // Fetch tasks on component mount
+    fetchEmployees(); // Fetch employees on component mount
+  }, []);
+
+  return (
+    <div style={{ position: "absolute", top: "-1150%", left: "-820%" }}>
+      <AdminNavbar />
+      <ToastContainer />
+      <div className="min-h-screen min-w-screen bg-gray-100 p-6 flex flex-col items-center -ml-5">
+        <h1 className="text-3xl font-bold mb-6 text-blue-700">
+          Task Management
+        </h1>
+
+        <div className="w-full flex justify-end mb-6">
+          {/* Create Task Button */}
+          <button
+            onClick={() => setIsCreatingTask(!isCreatingTask)}
+            className="px-4 py-2 bg-green-500 text-white rounded-md"
+          >
+            {isCreatingTask ? "Close Create Task Form" : "Create Task"}
+          </button>
+          {/* Assign Task Button */}
+          <button
+            onClick={() => setIsAssigningTask(!isAssigningTask)}
+            className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+          >
+            {isAssigningTask ? "Close Assign Task Form" : "Assign Task"}
+          </button>
+        </div>
+
+        {/* Create Task Form Modal */}
+        {isCreatingTask && (
+          <div className="absolute top-26 bg-white shadow-md rounded-lg p-6 w-full max-w-lg z-50">
+            <h2 className="text-xl font-semibold mb-4">Create a New Task</h2>
+            <input
+              type="text"
+              placeholder="Task Title"
+              value={taskForm.title}
+              onChange={(e) =>
+                setTaskForm({ ...taskForm, title: e.target.value })
+              }
+              className="w-full mb-3 p-2 border rounded"
             />
-            <TaskTitle label="completed" className={TASK_TYPE.completed} />
+            <textarea
+              placeholder="Task Description"
+              value={taskForm.description}
+              onChange={(e) =>
+                setTaskForm({ ...taskForm, description: e.target.value })
+              }
+              className="w-full mb-3 p-2 border rounded"
+            ></textarea>
+            <input
+              type="date"
+              value={taskForm.date}
+              onChange={(e) =>
+                setTaskForm({ ...taskForm, date: e.target.value })
+              }
+              className="w-full mb-3 p-2 border rounded"
+            />
+            <select
+              value={taskForm.priority}
+              onChange={(e) =>
+                setTaskForm({ ...taskForm, priority: e.target.value })
+              }
+              className="w-full mb-3 p-2 border rounded"
+            >
+              <option value="NORMAL">NORMAL</option>
+              <option value="HIGH">HIGH</option>
+              <option value="MEDIUM">MEDIUM</option>
+              <option value="LOW">LOW</option>
+            </select>
+            <button
+              onClick={createTask}
+              className="w-full bg-blue-500 text-white py-2 rounded"
+            >
+              Create Task
+            </button>
           </div>
         )}
 
-        {/* Task view toggle */}
-        <div className="w-full " style={{ minHeight: "400px" }}>
-          {selected === 0 ? (
-            <BoardView tasks={tasks} />
-          ) : (
-            <Table tasks={tasks} />
-          )}
-        </div>
-      </Tabs>
+        {/* Assign Task Form Modal */}
+        {isAssigningTask && (
+          <div className="absolute top-26 bg-white shadow-md rounded-lg p-6 w-full max-w-lg z-50">
+            <h2 className="text-xl font-semibold mb-4">
+              Assign Task to Employee
+            </h2>
+            <select
+              value={selectedTask}
+              onChange={(e) => setSelectedTask(e.target.value)}
+              className="w-full mb-3 p-2 border rounded"
+            >
+              <option value="">-- Select a Task --</option>
+              {tasks.map((task) => (
+                <option key={task._id} value={task._id}>
+                  {task.title}
+                </option>
+              ))}
+            </select>
+            <select
+              value={selectedEmployee}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+              className="w-full mb-3 p-2 border rounded"
+            >
+              <option value="">-- Select an Employee --</option>
+              {employees.map((employee) => (
+                <option key={employee._id} value={employee._id}>
+                  {employee.name}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={assignTask}
+              disabled={isAssigning}
+              className={`w-full px-4 py-2 text-white rounded ${
+                isAssigning ? "bg-gray-400" : "bg-blue-600"
+              }`}
+            >
+              {isAssigning ? "Assigning..." : "Assign Task"}
+            </button>
+          </div>
+        )}
 
-      <AddTask open={open} setOpen={setOpen} />
+        {/* Task List Table */}
+        <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-7xl mb-6 pt-26">
+          <h2 className="text-xl font-semibold mb-4">Task List</h2>
+          <table className="w-full table-fixed border-collapse border border-gray-300">
+            <thead>
+              <tr className=" bg-blue-700">
+                <th className="py-2 px-4 border border-gray-300 ">S.No</th>
+                <th className="border border-gray-300 px-4 py-2">Title</th>
+                <th className="border border-gray-300 px-4 py-2">Priority</th>
+                <th className="border border-gray-300 px-4 py-2">Date</th>
+                <th className="border border-gray-300 px-4 py-2">
+                  Assigned To
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {tasks.map((task, index) => (
+                <tr key={task._id}>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {index + 1}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {task.title}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {task.priority}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {new Date(task.date).toLocaleDateString()}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {task.team.length > 0
+                      ? task.team.map((employee) => (
+                          <span key={employee._id}>
+                            {employee.name || "Unknown"}
+                          </span>
+                        ))
+                      : "Not Assigned"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

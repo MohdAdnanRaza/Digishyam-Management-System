@@ -26,7 +26,8 @@ import { motion } from "framer-motion";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AdminNavbar from "./AdminNavbar";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const AddTeam = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -47,7 +48,7 @@ const AddTeam = () => {
         setTeam(response.data); // Assuming response.data contains an array of team members
       } catch (error) {
         console.error(error);
-        alert("Error fetching team data");
+        toast.error("Error fetching team data");
       }
     };
 
@@ -84,7 +85,9 @@ const AddTeam = () => {
             member._id === editing._id ? { ...member, ...formData } : member
           )
         );
-        alert(response.data.message || "Team member updated successfully!");
+        toast.success(
+          response.data.message || "Team member updated successfully!"
+        );
       } else {
         // Add new member
         const response = await axios.post(
@@ -92,12 +95,14 @@ const AddTeam = () => {
           formData
         );
         setTeam((prev) => [...prev, { ...formData, id: response.data._id }]);
-        alert(response.data.message || "Team member added successfully!");
+        toast.success(
+          response.data.message || "Team member added successfully!"
+        );
       }
       handleClose();
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -111,10 +116,10 @@ const AddTeam = () => {
     try {
       await axios.delete(`http://localhost:4000/api/auth/delete/${id}`);
       setTeam((prev) => prev.filter((member) => member._id !== id));
-      alert("Team member deleted successfully!");
+      toast.success("Team member deleted successfully!");
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -122,6 +127,7 @@ const AddTeam = () => {
     <div style={{ position: "absolute", top: "-1147%", left: "-820%" }}>
       <AdminNavbar />
       <div>
+        <ToastContainer />
         <Box padding="2rem ">
           <Typography variant="h4" gutterBottom>
             Team Management
@@ -138,7 +144,7 @@ const AddTeam = () => {
           {/* Team Table */}
           <TableContainer component={Paper}>
             <Table>
-              <TableHead>
+              <TableHead sx={{ backgroundColor: "primary.main" }}>
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Mobile Number</TableCell>
@@ -148,25 +154,29 @@ const AddTeam = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {team.map((member) => (
-                  <TableRow key={member.id}>
-                    <TableCell>{member.name}</TableCell>
-                    <TableCell>{member.mobile}</TableCell>
-                    <TableCell>{member.email}</TableCell>
-                    <TableCell>{member.role}</TableCell>
-                    <TableCell>
-                      <IconButton onClick={() => handleEdit(member)}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        color="error"
-                        onClick={() => handleDelete(member._id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {/* {team.map((member) => (
+                  <TableRow key={member.id}> */}
+                {team
+                  .filter((member) => member.role === "staff") // Only show staff
+                  .map((member) => (
+                    <TableRow key={member.id}>
+                      <TableCell>{member.name}</TableCell>
+                      <TableCell>{member.mobile}</TableCell>
+                      <TableCell>{member.email}</TableCell>
+                      <TableCell>{member.role}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => handleEdit(member)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDelete(member._id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -236,8 +246,8 @@ const AddTeam = () => {
                       onChange={handleChange}
                     >
                       <MenuItem value="staff">Staff</MenuItem>
-                      <MenuItem value="client">Client</MenuItem>
-                      <MenuItem value="admin">Admin</MenuItem>
+                      {/* <MenuItem value="client">Client</MenuItem>
+                      <MenuItem value="admin">Admin</MenuItem> */}
                     </Select>
                   </FormControl>
                 </Box>

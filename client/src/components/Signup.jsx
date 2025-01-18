@@ -11,7 +11,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import TestimonialSection from "./TestimonialSection";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Signup = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -32,10 +33,10 @@ const Signup = () => {
     setIsLoading(true);
     try {
       await axios.post("http://localhost:4000/api/auth/signup", formData);
-      alert("Signup successful!");
-      navigate("/login");
+      toast.success("Signup successful!");
+      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-      alert(err.response?.data?.message || "Something went wrong!");
+      toast.error(err.response?.data?.message || "Something went wrong!");
     } finally {
       setIsLoading(false);
     }
@@ -141,8 +142,8 @@ const Signup = () => {
                 sx={{ marginBottom: "15px" }}
               >
                 <MenuItem value="client">Client</MenuItem>
-                <MenuItem value="staff">Staff</MenuItem>
-                <MenuItem value="admin">Admin</MenuItem>
+                {/* <MenuItem value="staff">Staff</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem> */}
               </TextField>
               <Button
                 type="submit"
@@ -162,6 +163,7 @@ const Signup = () => {
               </Typography>
             </form>
           </Paper>
+          <ToastContainer />
         </Box>
       </Grid>
     </Grid>

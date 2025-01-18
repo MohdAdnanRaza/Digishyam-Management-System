@@ -7,7 +7,7 @@ import {
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup";
 import Admin from "./components/AdminDashboard/Admin";
-import Mainpage from "./components/Mainpage";
+
 import Home from "./pages/Home";
 import AboutUs from "./components/About Us";
 import { isAuthenticated, getUserRole } from "./utils/auth";
@@ -24,8 +24,11 @@ import EmployeeDashboard from "./components/Staff/EmployeeDashboard";
 import Profile from "./components/Staff/Profile";
 import List from "./components/Staff/Leaves/List";
 import AddLeave from "./components/Staff/Leaves/AddLeave";
-import ContactUs from "./components/ContactUs";
+
 import AddSalary from "./components/AdminDashboard/AddSalary";
+import Contact from "./components/Contact/Contact";
+import GetTask from "./components/Staff/GetTask";
+import Mainpage from "./components/Mainpage/Mainpage";
 
 const ProtectedRoute = ({ children, roles }) => {
   if (!isAuthenticated()) return <Navigate to="/login" />;
@@ -41,7 +44,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/contact" element={<Contact />} />
 
         {/* Admin Routes */}
         <Route
@@ -69,8 +72,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* <Route index element={<Summary />}></Route> */}
-
+          <Route index element={<GetTask />} />
           <Route path="profile" element={<Profile />} />
           <Route path="leave" element={<List />} />
           <Route path="leave/add-leave" element={<AddLeave />} />

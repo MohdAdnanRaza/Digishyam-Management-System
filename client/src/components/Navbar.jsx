@@ -15,7 +15,7 @@ import {
   useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-
+import logo from "../assets/logo.png";
 const Navbar = ({ onServicesClick }) => {
   const navigate = useNavigate();
   const theme = useTheme();
@@ -29,13 +29,22 @@ const Navbar = ({ onServicesClick }) => {
   return (
     <AppBar position="static" color="transparent" elevation={3}>
       <Toolbar style={{ justifyContent: "space-between" }}>
-        <Typography
+        {/* <Typography
           variant="h6"
           style={{ fontWeight: "bold", color: "#0056D2" }}
         >
           DigiShyam
+        </Typography> */}
+        <Typography
+          variant="h6"
+          style={{ fontWeight: "bold", color: "#0056D2" }}
+        >
+          <img
+            src={logo} // Replace with your logo's file path
+            alt="DigiShyam Logo"
+            style={{ height: "70px", width: "auto" }} // Adjust the height as needed
+          />
         </Typography>
-
         {/* Mobile Menu */}
         {isMobile ? (
           <>
