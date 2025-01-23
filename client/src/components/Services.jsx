@@ -167,7 +167,6 @@ const serviceDetails = {
       "Remote Troubleshooting",
       "Custom Support Solutions",
     ],
-    price: "₹1499",
   },
 };
 
@@ -329,14 +328,16 @@ const ServiceCard = ({ service }) => {
                     )}
                   </ul>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-gray-900">
-                    Starting at {serviceDetails[service.title].price}
-                  </span>
-                  <Button variant="contained" color="primary">
-                    <a href="mailto:info@digishyam.com">Get Started</a>
-                  </Button>
-                </div>
+                {serviceDetails[service.title].price && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-xl font-bold text-gray-900">
+                      Starting at {serviceDetails[service.title].price}
+                    </span>
+                    <Button variant="contained" color="primary">
+                      <a href="mailto:info@digishyam.com">Get Started</a>
+                    </Button>
+                  </div>
+                )}
               </>
             ) : (
               <p className="text-gray-600">
@@ -355,15 +356,14 @@ const ServiceCard = ({ service }) => {
     </div>
   );
 };
-
 const Services = () => {
   return (
-    <section className="bg-white translate-y-[60px] translate-x-[1px] w-[104%]">
-      <div className="container pb-14 pt-16">
+    <section className="bg-white w-full">
+      <div className="container pb-14 pt-16 overflow-hidden">
         <h1 className="text-4xl font-bold text-left pb-10">
           Services we provide
         </h1>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-8">
           {ServicesData.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
@@ -372,5 +372,21 @@ const Services = () => {
     </section>
   );
 };
+// const Services = () => {
+//   return (
+//     <section className="bg-white translate-y-[60px] translate-x-[1px] w-[104%]">
+//       <div className="container pb-14 pt-16">
+//         <h1 className="text-4xl font-bold text-left pb-10">
+//           Services we provide
+//         </h1>
+//         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8">
+//           {ServicesData.map((service) => (
+//             <ServiceCard key={service.id} service={service} />
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
 
 export default Services;

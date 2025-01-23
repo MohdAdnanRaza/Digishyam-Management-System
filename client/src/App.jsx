@@ -29,6 +29,8 @@ import AddSalary from "./components/AdminDashboard/AddSalary";
 import Contact from "./components/Contact/Contact";
 import GetTask from "./components/Staff/GetTask";
 import Mainpage from "./components/Mainpage/Mainpage";
+import TrainingPage from "./components/TrainingPage";
+import SettingsPage from "./components/Staff/SettingsPage";
 
 const ProtectedRoute = ({ children, roles }) => {
   if (!isAuthenticated()) return <Navigate to="/login" />;
@@ -43,6 +45,7 @@ function App() {
         <Route path="/" element={<Mainpage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/training" element={<TrainingPage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<Contact />} />
 
@@ -77,6 +80,7 @@ function App() {
           <Route path="leave" element={<List />} />
           <Route path="leave/add-leave" element={<AddLeave />} />
           <Route path="salary" element={<List />} />
+          <Route path="setting" element={<SettingsPage />} />
         </Route>
         <Route
           path="/client"

@@ -14,6 +14,10 @@ const salarySchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    dueAmount: {
+      type: Number,
+      required: true,
+    },
     salaryDate: {
       type: Date,
       required: true,

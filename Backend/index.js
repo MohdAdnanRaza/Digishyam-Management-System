@@ -12,6 +12,7 @@ const clientRoutes = require("./routes/clientRoutes");
 const leaveRoutes = require("./routes/leaveRoutes");
 const salaryRoutes = require("./routes/salaryRoutes");
 const taskRoutes = require("./routes/taskRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 // Load environment variables
 dotenv.config();
 
@@ -33,6 +34,8 @@ app.use("/api/clients", clientRoutes);
 app.use("/api/leave", leaveRoutes);
 app.use("/api/salary", salaryRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/uploads", express.static("uploads"));
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

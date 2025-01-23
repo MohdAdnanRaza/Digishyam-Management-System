@@ -1,100 +1,156 @@
 import React from "react";
-import { FaInstagram, FaWhatsapp, FaYoutube } from "react-icons/fa";
-import { TbWorldWww } from "react-icons/tb";
 import { motion } from "framer-motion";
-
+import {
+  Instagram,
+  Youtube,
+  Globe,
+  Send,
+  MapPin,
+  Phone,
+  Mail,
+} from "lucide-react";
+import logo from "../assets/logo.png";
 const Footer = () => {
   return (
-    <footer className="py-28 bg-[#f7f7f7]">
+    <footer className="bg-gradient-to-br from-gray-100 to-gray-200 py-16">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        className="container"
+        transition={{ duration: 0.6 }}
+        className="container mx-auto px-4"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 md:gap-4">
-          {/* first section */}
-          <div className="space-y-4 max-w-[300px]">
-            <h1 className="text-2xl font-bold">DigiShyam</h1>
-            <p className="text-dark2">
-              Delivering the best digital marketing solutions for all your
-              business needs. Whether you want to boost your online presence,
-              generate quality leads, or enhance customer engagement, everything
-              is possible with our cutting-edge digital marketing strategies and
-              tools., we provide a comprehensive learning experience designed to
-              help you master coding skills, build projects, and launch your
-              tech career.
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {/* Company Info */}
+          <div className="space-y-6">
+            {/* <h2 className="text-3xl font-bold text-primary">DigiShyam</h2> */}
+            <img
+              src={logo} // Replace with your logo's file path
+              alt="DigiShyam Logo"
+              style={{ height: "70px", width: "auto" }} // Adjust the height as needed
+            />
+            <p className="text-gray-600 leading-relaxed">
+              Delivering cutting-edge digital marketing solutions to transform
+              your online presence, generate quality leads, and enhance customer
+              engagement through innovative strategies.
             </p>
-          </div>
-          {/* second section */}
-          <div className="grid grid-cols-2 gap-10">
-            <div className="space-y-4">
-              <h1 className="text-2xl font-bold">Services</h1>
-              <div className="text-dark2">
-                <ul className="space-y-2 text-lg">
-                  <li className="cursor-pointer hover:text-secondary duration-200">
-                    Web Development
-                  </li>
-                  <li className="cursor-pointer hover:text-secondary duration-200">
-                    Software Development
-                  </li>
-                  <li className="cursor-pointer hover:text-secondary duration-200">
-                    Apps Development
-                  </li>
-                  <li className="cursor-pointer hover:text-secondary duration-200">
-                    E-learning
-                  </li>
-                </ul>
-              </div>
+            <div className="flex space-x-4">
+              <a
+                href="https://wa.me/yourwhatsappnumber"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className="text-green-500 hover:text-green-600"
+                >
+                  <Send size={24} />
+                </motion.div>
+              </a>
+              <a
+                href="https://www.instagram.com/digishyambareilly/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className="text-pink-500 hover:text-pink-600"
+                >
+                  <Instagram size={24} />
+                </motion.div>
+              </a>
+              <a
+                href="https://digishyam.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className="text-blue-500 hover:text-blue-600"
+                >
+                  <Globe size={24} />
+                </motion.div>
+              </a>
+              <a
+                href="https://www.youtube.com/@digishyambly"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className="text-red-500 hover:text-red-600"
+                >
+                  <Youtube size={24} />
+                </motion.div>
+              </a>
             </div>
-            <div className="space-y-4">
-              <h1 className="text-2xl font-bold">Links</h1>
-              <div className="text-dark2">
-                <ul className="space-y-2 text-lg">
-                  <li className="cursor-pointer hover:text-secondary duration-200">
-                    Home
+          </div>
+
+          {/* Quick Links */}
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Services</h3>
+              <ul className="space-y-2 text-gray-600">
+                {[
+                  "Web Development",
+                  "Software Development",
+                  "Apps Development",
+                  "E-learning",
+                ].map((service) => (
+                  <li
+                    key={service}
+                    className="hover:text-primary transition-colors cursor-pointer"
+                  >
+                    {service}
                   </li>
-                  <li className="cursor-pointer hover:text-secondary duration-200">
-                    Services
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Company</h3>
+              <ul className="space-y-2 text-gray-600">
+                {["Home", "Services", "About", "Contact"].map((link) => (
+                  <li
+                    key={link}
+                    className="hover:text-primary transition-colors cursor-pointer"
+                  >
+                    {link}
                   </li>
-                  <li className="cursor-pointer hover:text-secondary duration-200">
-                    About
-                  </li>
-                  <li className="cursor-pointer hover:text-secondary duration-200">
-                    Contact
-                  </li>
-                </ul>
-              </div>
+                ))}
+              </ul>
             </div>
           </div>
-          {/* third section */}
-          <div className="space-y-4 max-w-[300px]">
-            <h1 className="text-2xl font-bold">Get In Touch</h1>
-            <div className="flex items-center">
+
+          {/* Contact */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold">Contact Us</h3>
+            <div className="flex items-center space-x-3 text-gray-600">
+              <MapPin size={20} />
+              <span>Bareilly, Uttar Pradesh, India</span>
+            </div>
+            <div className="flex items-center space-x-3 text-gray-600">
+              <Phone size={20} />
+              <span>+91 1234567890</span>
+            </div>
+            <div className="flex items-center space-x-3 text-gray-600">
+              <Mail size={20} />
+              <span>info@digishyam.com</span>
+            </div>
+            <div className="flex">
               <input
-                type="text"
+                type="email"
                 placeholder="Enter your email"
-                className="p-3 rounded-s-xl bg-white w-full py-4 focus:ring-0 focus:outline-none placeholder:text-dark2"
+                className="p-3 rounded-l-lg border w-full focus:ring-2 focus:ring-primary focus:outline-none"
               />
-              <button className="bg-primary text-white font-semibold py-4 px-6 rounded-e-xl">
-                Go
+              <button className="bg-primary text-white px-6 rounded-r-lg hover:bg-opacity-90 transition-colors">
+                Subscribe
               </button>
             </div>
-            {/* social icons */}
-            <div className="flex space-x-6 py-3">
-              <a href="https://chat.whatsapp.com/FQSKgJ5f1eIAhlyF5sVym0">
-                <FaWhatsapp className="cursor-pointer hover:text-primary hover:scale-105 duration-200" />
-              </a>
-              <a href="https://www.instagram.com/digishyambareilly/">
-                <FaInstagram className="cursor-pointer hover:text-primary hover:scale-105 duration-200" />
-              </a>
-              <a href="https://digishyam.com//">
-                <TbWorldWww className="cursor-pointer hover:text-primary hover:scale-105 duration-200" />
-              </a>
-              <a href="https://www.youtube.com/@digishyambly">
-                <FaYoutube className="cursor-pointer hover:text-primary hover:scale-105 duration-200" />
-              </a>
-            </div>
           </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="mt-12 text-center text-gray-500 border-t pt-6">
+          © {new Date().getFullYear()} DigiShyam. All Rights Reserved.
         </div>
       </motion.div>
     </footer>

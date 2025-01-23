@@ -1,18 +1,15 @@
 import React from "react";
 import BannerPng from "../assets/banner.png";
-import { GrUserExpert } from "react-icons/gr";
-import { MdOutlineAccessTime } from "react-icons/md";
-import { FaBookReader } from "react-icons/fa";
 import { FaServicestack } from "react-icons/fa6";
-import { FadeUp } from "../components/Header";
-import { motion } from "framer-motion";
 import { FaShippingFast } from "react-icons/fa";
 import { IoIosPricetag } from "react-icons/io";
+import { motion } from "framer-motion";
+import { FadeUp } from "../components/Header";
 
 const Banner = () => {
   return (
-    <section>
-      <div className="container py-14 md:py-24 grid grid-cols-1 md:grid-cols-2 gap-8 space-y-6 md:space-y-0">
+    <section className="bg-gray-100">
+      <div className="container mx-auto px-4 py-14 md:py-24 grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Banner Image */}
         <div className="flex justify-center items-center">
           <motion.img
@@ -21,51 +18,55 @@ const Banner = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             src={BannerPng}
-            alt=""
-            className="w-[350px] md:max-w-[450px] object-cover drop-shadow"
+            alt="Digital Marketing"
+            className="w-[90%] sm:w-[80%] md:max-w-[450px] object-cover drop-shadow"
           />
         </div>
+
         {/* Banner Text */}
-        <div className="flex flex-col justify-center">
-          <div className="text-center md:text-left space-y-12">
+        <div className="flex flex-col justify-center sm:mt-0 mt-12">
+          <div className="text-center md:text-left space-y-8 md:space-y-12">
             <motion.h1
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-3xl md:text-4xl font-bold !leading-snug"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold leading-snug"
             >
               The Best Leading Digital Marketing Service Provider
             </motion.h1>
             <div className="flex flex-col gap-6">
+              {/* Service Item 1 */}
               <motion.div
                 variants={FadeUp(0.2)}
                 initial="initial"
                 whileInView={"animate"}
                 viewport={{ once: true }}
-                className="flex items-center gap-4 p-6 bg-[#f4f4f4] rounded-2xl hover:bg-white duration-300 hover:shadow-2xl"
+                className="flex items-center gap-4 p-6 bg-[#f4f4f4] rounded-2xl hover:bg-white duration-300 hover:shadow-lg"
               >
-                <FaServicestack className="text-2xl" />
+                <FaServicestack className="text-2xl text-blue-500" />
                 <p className="text-lg">20+ Services</p>
               </motion.div>
+              {/* Service Item 2 */}
               <motion.div
                 variants={FadeUp(0.4)}
                 initial="initial"
                 whileInView={"animate"}
                 viewport={{ once: true }}
-                className="flex items-center gap-4 p-6 bg-[#f4f4f4] rounded-2xl hover:bg-white duration-300 hover:shadow-2xl"
+                className="flex items-center gap-4 p-6 bg-[#f4f4f4] rounded-2xl hover:bg-white duration-300 hover:shadow-lg"
               >
-                <FaShippingFast className="text-2xl" />
-                <p className="text-lg">Fast and Effective Delievered</p>
+                <FaShippingFast className="text-2xl text-green-500" />
+                <p className="text-lg">Fast and Effective Delivery</p>
               </motion.div>
+              {/* Service Item 3 */}
               <motion.div
                 variants={FadeUp(0.6)}
                 initial="initial"
                 whileInView={"animate"}
                 viewport={{ once: true }}
-                className="flex items-center gap-4 p-6 bg-[#f4f4f4] rounded-2xl hover:bg-white duration-300 hover:shadow-2xl"
+                className="flex items-center gap-4 p-6 bg-[#f4f4f4] rounded-2xl hover:bg-white duration-300 hover:shadow-lg"
               >
-                <IoIosPricetag className="text-2xl" />
+                <IoIosPricetag className="text-2xl text-red-500" />
                 <p className="text-lg">Affordable Prices</p>
               </motion.div>
             </div>

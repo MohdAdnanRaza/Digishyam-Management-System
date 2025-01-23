@@ -146,9 +146,11 @@ const AddTeam = () => {
             <Table>
               <TableHead sx={{ backgroundColor: "primary.main" }}>
                 <TableRow>
+                  <TableCell>Profile</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Mobile Number</TableCell>
                   <TableCell>Email</TableCell>
+                  <TableCell>Date of Joining</TableCell>
                   <TableCell>Role</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
@@ -160,9 +162,23 @@ const AddTeam = () => {
                   .filter((member) => member.role === "staff") // Only show staff
                   .map((member) => (
                     <TableRow key={member.id}>
+                      <TableCell>
+                        <img
+                          src={`http://localhost:4000/${member.profilePicture}`}
+                          alt="Profile"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            borderRadius: "50%",
+                          }}
+                        />
+                      </TableCell>
                       <TableCell>{member.name}</TableCell>
                       <TableCell>{member.mobile}</TableCell>
                       <TableCell>{member.email}</TableCell>
+                      <TableCell>
+                        {new Date(member.joiningDate).toLocaleDateString()}
+                      </TableCell>
                       <TableCell>{member.role}</TableCell>
                       <TableCell>
                         <IconButton onClick={() => handleEdit(member)}>
@@ -236,6 +252,21 @@ const AddTeam = () => {
                     />
                   </Box>
                 )}
+                <Box mb={2}>
+                  <TextField
+                    fullWidth
+                    label="Joining Date"
+                    variant="outlined"
+                    name="joiningDate"
+                    type="date"
+                    value={formData.joiningDate}
+                    onChange={handleChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    required
+                  />
+                </Box>
                 <Box mb={3}>
                   <FormControl fullWidth>
                     <InputLabel id="role-label">Role</InputLabel>
@@ -250,6 +281,34 @@ const AddTeam = () => {
                       <MenuItem value="admin">Admin</MenuItem> */}
                     </Select>
                   </FormControl>
+                </Box>
+                <Box mb={2}>
+                  <Button variant="contained" component="label">
+                    Upload Profile Picture
+                    <input
+                      type="file"
+                      hidden
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        const formData = new FormData();
+                        formData.append("profilePicture", file);
+                        axios
+                          .post(
+                            "http://localhost:4000/api/auth/upload-profile-picture",
+                            formData
+                          )
+                          .then((response) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              profilePicture: response.data.filePath,
+                            }));
+                          })
+                          .catch((error) => {
+                            toast.error("Error uploading profile picture");
+                          });
+                      }}
+                    />
+                  </Button>
                 </Box>
                 <DialogActions>
                   <Button onClick={handleClose}>Cancel</Button>

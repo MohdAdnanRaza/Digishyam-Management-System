@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "staff", "client"],
       default: "client",
     },
+
+    joiningDate: { type: Date, required: false }, // New field for joining date
+    profilePicture: { type: String }, // New field for profile picture URL
   },
   {
     timestamps: true,

@@ -6,7 +6,8 @@ const User = require("../models/User");
 //Register api
 const signup = async (req, res) => {
   try {
-    const { name, email, mobile, password, role } = req.body;
+    const { name, email, mobile, password, role, joiningDate, profilePicture } =
+      req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       name,
@@ -14,6 +15,8 @@ const signup = async (req, res) => {
       mobile,
       password: hashedPassword,
       role,
+      joiningDate,
+      profilePicture,
     });
     await newUser.save();
     res.status(201).json({ message: `User registered with name $(name)` });

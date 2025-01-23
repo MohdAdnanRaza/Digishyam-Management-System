@@ -14,32 +14,19 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { styled } from "@mui/system";
-import { Email, Person, Phone, Work } from "@mui/icons-material";
-import Tilt from "react-parallax-tilt";
+import { Email, Person, Phone, Work, CalendarToday } from "@mui/icons-material";
 
-const GradientCard = styled(Box)(({ theme }) => ({
-  maxWidth: 500,
-  margin: "40px auto",
-  padding: "20px",
+const StyledCard = styled(Box)(({ theme }) => ({
+  maxWidth: 1000,
+  margin: "50px auto",
+  marginTop: "10%",
+  padding: "30px",
   textAlign: "center",
   borderRadius: "20px",
-  background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 50%)",
-  color: "white",
-  boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
-}));
-
-const AnimatedText = styled(Typography)(({ theme }) => ({
-  fontSize: "1.2rem",
-  fontWeight: "bold",
-  background: "linear-gradient(90deg, #ff8a00, #e52e71)",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  animation: "gradientText 3s ease-in-out infinite",
-  "@keyframes gradientText": {
-    "0%": { backgroundPosition: "0% 50%" },
-    "50%": { backgroundPosition: "100% 50%" },
-    "100%": { backgroundPosition: "0% 50%" },
-  },
+  backgroundColor: "#f0f0f0",
+  color: "#4a4a4a",
+  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
+  display: "flex",
 }));
 
 const Profile = () => {
@@ -118,6 +105,7 @@ const Profile = () => {
         justifyContent="center"
         alignItems="center"
         height="100vh"
+        width="100vw"
       >
         <CircularProgress color="secondary" />
       </Box>
@@ -125,29 +113,30 @@ const Profile = () => {
   }
 
   return (
-    <Tilt
-      tiltMaxAngleX={10}
-      tiltMaxAngleY={10}
-      glareEnable
-      glareMaxOpacity={0.3}
-    >
-      <GradientCard>
+    <div>
+      <StyledCard>
         <Avatar
-          src={userData.photo || "/default-avatar.png"}
+          src={`http://localhost:4000/${userData.profilePicture.replace(
+            "\\",
+            "/"
+          )}`}
           alt="Profile Photo"
           sx={{
-            width: 120,
-            height: 120,
-            margin: "20px auto",
-            border: "4px solid white",
+            maxWidth: 900,
+            width: 450,
+            height: 350,
+            borderRadius: "8px",
+            border: "6px solid black",
+            backgroundColor: "#bdbdbd",
           }}
-        />
-        <AnimatedText variant="h5">Welcome, {userData.name}</AnimatedText>
+        >
+          {!userData.profilePicture && userData.name.charAt(0).toUpperCase()}
+        </Avatar>
         <CardContent>
           <Box
             display="flex"
             alignItems="center"
-            justifyContent="center"
+            justifyContent="flex-start"
             my={1}
           >
             <Person fontSize="large" sx={{ marginRight: "10px" }} />
@@ -156,7 +145,7 @@ const Profile = () => {
           <Box
             display="flex"
             alignItems="center"
-            justifyContent="center"
+            justifyContent="flex-start"
             my={1}
           >
             <Email fontSize="large" sx={{ marginRight: "10px" }} />
@@ -165,7 +154,7 @@ const Profile = () => {
           <Box
             display="flex"
             alignItems="center"
-            justifyContent="center"
+            justifyContent="flex-start"
             my={1}
           >
             <Phone fontSize="large" sx={{ marginRight: "10px" }} />
@@ -174,96 +163,81 @@ const Profile = () => {
           <Box
             display="flex"
             alignItems="center"
-            justifyContent="center"
+            justifyContent="flex-start"
             my={1}
           >
             <Work fontSize="large" sx={{ marginRight: "10px" }} />
             <Typography variant="h6">Role: {userData.role}</Typography>
           </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIsEditOpen(true)}
-            sx={{ margin: "10px" }}
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-start"
+            my={1}
           >
-            Edit Profile
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => setIsResetOpen(true)}
-            sx={{ margin: "10px" }}
-          >
-            Reset Password
-          </Button>
+            <CalendarToday fontSize="large" sx={{ marginRight: "10px" }} />
+            <Typography variant="h6">
+              Joining Date:{" "}
+              {new Date(userData.joiningDate).toLocaleDateString()}
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="flex-start" my={1}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsEditOpen(true)}
+              sx={{ margin: "10px" }}
+            >
+              Edit Profile
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => setIsResetOpen(true)}
+              sx={{ margin: "10px" }}
+            >
+              Reset Password
+            </Button>
+          </Box>
         </CardContent>
-      </GradientCard>
+      </StyledCard>
 
-      {/* Edit Dialog */}
-      <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
-        <DialogTitle>Edit Profile</DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            margin="dense"
-            label="Name"
-            value={formValues.name}
-            onChange={(e) =>
-              setFormValues({ ...formValues, name: e.target.value })
-            }
-          />
-          <TextField
-            fullWidth
-            margin="dense"
-            label="Email"
-            value={formValues.email}
-            onChange={(e) =>
-              setFormValues({ ...formValues, email: e.target.value })
-            }
-          />
-          <TextField
-            fullWidth
-            margin="dense"
-            label="Mobile"
-            value={formValues.mobile}
-            onChange={(e) =>
-              setFormValues({ ...formValues, mobile: e.target.value })
-            }
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsEditOpen(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleEditSave} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {/* New Introduction Section for Digital Marketer */}
 
-      {/* Reset Password Dialog */}
-      <Dialog open={isResetOpen} onClose={() => setIsResetOpen(false)}>
-        <DialogTitle>Reset Password</DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            margin="dense"
-            type="password"
-            label="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsResetOpen(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleResetPassword} color="primary">
-            Reset
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Tilt>
+      <div
+        style={{
+          padding: "50px 20px",
+          textAlign: "center",
+          maxWidth: "1050px",
+        }}
+      >
+        <h1 className="bg-teal-700 font-bold ">About me</h1>
+        <Typography variant="body1" paragraph>
+          Our team member, {userData.name}, is an experienced digital marketer
+          who plays a key role in shaping our online presence. With a strong
+          background in digital strategies, they are adept at using various
+          digital channels to market products and services to consumers and
+          businesses. Their expertise includes SEO (Search Engine Optimization),
+          SEM (Search Engine Marketing), content marketing, social media
+          management, and email campaigns.
+        </Typography>
+        <Typography variant="body1" paragraph>
+          {userData.name} is passionate about staying ahead of trends in the
+          fast-paced world of digital marketing. By leveraging data and creative
+          strategies, they have successfully increased our brand visibility and
+          audience engagement. Their commitment to driving results through
+          digital innovation has contributed significantly to our business's
+          growth and success.
+        </Typography>
+        <Typography variant="body1" paragraph>
+          In addition to their technical skills, {userData.name} is a
+          collaborative team player who works closely with other departments to
+          ensure that marketing efforts align with business goals. Their ability
+          to think strategically and execute effectively makes them an
+          invaluable asset to our team.
+        </Typography>
+      </div>
+    </div>
   );
 };
 

@@ -49,7 +49,7 @@ const EmployeeSidebar = () => {
           <FaBuilding />
           <span>Leaves</span>
         </NavLink>
-        <NavLink
+        {/* <NavLink
           to={`salary`}
           className={({ isActive }) =>
             `${
@@ -59,9 +59,9 @@ const EmployeeSidebar = () => {
         >
           <FaMoneyBillWave />
           <span>Salary</span>
-        </NavLink>
+        </NavLink> */}
         <NavLink
-          to="/employee-dashboard/setting"
+          to={`setting`}
           className={({ isActive }) =>
             `${
               isActive ? "bg-teal-500 " : " "

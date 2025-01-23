@@ -9,7 +9,32 @@ const {
 const user = require("../models/User");
 const verifyToken = require("../middlewares/authMiddleware");
 const router = express.Router();
+const multer = require("multer");
+// Set up storage configuration for multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Specify the folder where files will be uploaded
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname); // Generate a unique file name
+  },
+});
 
+// Initialize multer with the storage configuration
+const upload = multer({ storage });
+
+// Route for uploading profile picture
+router.post(
+  "/upload-profile-picture",
+  upload.single("profilePicture"),
+  (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+    // Return the file path of the uploaded image
+    res.status(200).json({ filePath: req.file.path });
+  }
+);
 router.post("/signup", signup);
 // router.post("/verify-signup", verifyOtpSignup);
 router.post("/login", login);

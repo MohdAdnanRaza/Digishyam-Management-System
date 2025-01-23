@@ -10,12 +10,7 @@ import {
   Box,
   IconButton,
 } from "@mui/material";
-import {
-  CalendarToday,
-  AccessTime,
-  FilterList,
-  MoreHoriz,
-} from "@mui/icons-material";
+import { CalendarToday, AccessTime, MoreHoriz } from "@mui/icons-material";
 
 const GetTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -59,32 +54,58 @@ const GetTask = () => {
   const getStatusColor = (stage) => {
     switch (stage?.toUpperCase()) {
       case "TODO":
-        return "warning"; // Yellow color for TODO
+        return "warning";
       case "IN PROGRESS":
-        return "primary"; // Blue color for IN PROGRESS
+        return "primary";
       case "COMPLETED":
-        return "success"; // Green color for COMPLETED
+        return "success";
       default:
-        return "default"; // Default color for unexpected cases
+        return "default";
     }
   };
 
   const toggleDescription = (taskId) => {
     setDescriptionVisible((prev) => ({
       ...prev,
-      [taskId]: !prev[taskId], // Toggle visibility of description
+      [taskId]: !prev[taskId],
     }));
   };
 
+  const updateTaskStatus = async (taskId, currentStage) => {
+    // Determine the next stage
+    const nextStage =
+      currentStage === "TODO"
+        ? "IN PROGRESS"
+        : currentStage === "IN PROGRESS"
+        ? "COMPLETED"
+        : "TODO";
+
+    try {
+      // Send the update request to the backend
+      const response = await axios.put(
+        `http://localhost:4000/api/tasks/${taskId}/stage`,
+        { stage: nextStage }
+      );
+
+      // Update the local tasks state
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task._id === taskId ? { ...task, stage: response.data.stage } : task
+        )
+      );
+      toast.success(`Task moved to ${nextStage}`);
+    } catch (error) {
+      console.error("Error updating task status:", error);
+      toast.error("Failed to update task status");
+    }
+  };
+
   return (
-    <Box sx={{ p: 4, maxWidth: "800px", mx: "10px" }}>
+    <Box sx={{ p: 4, maxWidth: "800px", mx: "10px", my: "20%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4" component="h1">
           My Tasks
         </Typography>
-        <Button variant="outlined" startIcon={<FilterList />}>
-          Filter
-        </Button>
       </Box>
 
       <Box sx={{ display: "grid", gap: 2 }}>
@@ -95,12 +116,12 @@ const GetTask = () => {
               variant="outlined"
               sx={{
                 p: 2,
-                borderRadius: "12px", // Rounded corners
-                backgroundColor: "rgba(240, 248, 255, 1)", // Default light background
+                borderRadius: "12px",
+                backgroundColor: "rgba(240, 248, 255, 1)",
                 transition: "transform 0.2s ease, background-color 0.2s ease",
                 "&:hover": {
                   transform: "scale(1.02)",
-                  backgroundColor: "rgba(0, 123, 255, 0.1)", // Light blue on hover
+                  backgroundColor: "rgba(0, 123, 255, 0.1)",
                 },
               }}
             >
@@ -111,13 +132,12 @@ const GetTask = () => {
                       {task.title || "Untitled Task"}
                     </Typography>
 
-                    {/* Vertical dots icon aligned to the right */}
                     <IconButton
                       onClick={() => toggleDescription(task._id)}
                       size="small"
                       sx={{
-                        ml: 2, // Adds spacing between title and dots
-                        transform: "rotate(90deg)", // Rotates the icon to make it vertical
+                        ml: 2,
+                        transform: "rotate(90deg)",
                       }}
                     >
                       <MoreHoriz />
@@ -163,12 +183,24 @@ const GetTask = () => {
                   </Box>
                 </Box>
 
-                {/* Conditionally render description */}
                 {descriptionVisible[task._id] && (
                   <Typography variant="body2" sx={{ mt: 2 }}>
                     {task.description || "No description available"}
                   </Typography>
                 )}
+
+                <Button
+                  variant="contained"
+                  color={getStatusColor(task.stage)}
+                  onClick={() => updateTaskStatus(task._id, task.stage)}
+                  sx={{ mt: 2 }}
+                >
+                  {task.stage === "TODO"
+                    ? "Start Task"
+                    : task.stage === "IN PROGRESS"
+                    ? "Complete Task"
+                    : "Reset to TODO"}
+                </Button>
               </CardContent>
             </Card>
           ))

@@ -29,12 +29,6 @@ const Navbar = ({ onServicesClick }) => {
   return (
     <AppBar position="static" color="transparent" elevation={3}>
       <Toolbar style={{ justifyContent: "space-between" }}>
-        {/* <Typography
-          variant="h6"
-          style={{ fontWeight: "bold", color: "#0056D2" }}
-        >
-          DigiShyam
-        </Typography> */}
         <Typography
           variant="h6"
           style={{ fontWeight: "bold", color: "#0056D2" }}

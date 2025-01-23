@@ -227,6 +227,7 @@ const CreateTask = () => {
                 <th className="border border-gray-300 px-4 py-2">Title</th>
                 <th className="border border-gray-300 px-4 py-2">Priority</th>
                 <th className="border border-gray-300 px-4 py-2">Date</th>
+                <th className="border border-gray-300 px-4 py-2">Stage</th>
                 <th className="border border-gray-300 px-4 py-2">
                   Assigned To
                 </th>
@@ -246,6 +247,9 @@ const CreateTask = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {new Date(task.date).toLocaleDateString()}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {task.stage}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {task.team.length > 0

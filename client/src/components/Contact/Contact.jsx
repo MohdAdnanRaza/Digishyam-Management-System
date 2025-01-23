@@ -4,7 +4,8 @@ import { Card, CardContent, TextField, Button } from "@mui/material";
 import { FaInstagram, FaFacebookF, FaYoutube, FaGlobe } from "react-icons/fa";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -13,9 +14,25 @@ const Contact = () => {
     message: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+
+    try {
+      const response = await fetch("http://localhost:4000/api/contact/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast.success("Form submitted successfully");
+        setFormData({ name: "", email: "", phone: "", message: "" }); // Reset form
+      } else {
+        console.error("Failed to submit form");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   const handleChange = (e) => {
@@ -27,6 +44,7 @@ const Contact = () => {
       style={{ position: "absolute", top: "0.2%", left: "0.5%", width: "100%" }}
     >
       <Navbar />
+      <ToastContainer />
       <div
         className="h-200"
         style={{
@@ -75,7 +93,9 @@ const Contact = () => {
                     </div>
                     <div className="flex items-center space-x-3">
                       <MapPin style={{ height: "20px", width: "20px" }} />
-                      <span>123 Rampur garden,Civil Lines,Bareilly</span>
+                      <span>
+                        Dhanwantari Tomar Chauraha, Rampur Garden,Bareilly
+                      </span>
                     </div>
                   </div>
                   <div className="pt-6">
