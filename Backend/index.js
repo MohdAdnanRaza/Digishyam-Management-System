@@ -20,8 +20,15 @@ const PORT = process.env.PORT || 5000;
 // Initialize Express app
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173" }));
-
+// app.use(cors({ origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://digishyam-management-system-frontend.onrender.com",
+    ],
+  })
+);
 // MongoDB connection
 connectDB();
 
@@ -35,6 +42,10 @@ app.use("/api/salary", salaryRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/uploads", express.static("uploads"));
+
+app.get("/", (req, res) => {
+  res.send("Backend is running successfully! 🚀");
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
