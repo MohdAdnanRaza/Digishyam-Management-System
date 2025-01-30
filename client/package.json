@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-     "build": "esbuild src/index.js --bundle --outdir=dist",
+     "build": "esbuild src/main.jsx --bundle --outdir=dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
