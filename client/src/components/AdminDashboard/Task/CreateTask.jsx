@@ -100,7 +100,7 @@ const CreateTask = () => {
   }, []);
 
   return (
-    <div style={{ position: "absolute", top: "-1150%", left: "-820%" }}>
+    <div style={{ position: "absolute", top: "-1150%", left: "-817%" }}>
       <AdminNavbar />
       <ToastContainer />
       <div className="min-h-screen min-w-screen bg-gray-100 p-6 flex flex-col items-center -ml-5">

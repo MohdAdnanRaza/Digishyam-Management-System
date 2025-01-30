@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
-const twilio = require("twilio");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");

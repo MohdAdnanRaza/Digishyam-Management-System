@@ -122,14 +122,16 @@ const Footer = () => {
 
           {/* Contact */}
           <div className="space-y-6">
-            <h3 className="text-xl font-semibold">Contact Us</h3>
+            <h3 className=" font-semibold">Contact Us</h3>
             <div className="flex items-center space-x-3 text-gray-600">
-              <MapPin size={20} />
-              <span>Bareilly, Uttar Pradesh, India</span>
+              <MapPin size={30} />
+              <span>
+                Dhanwantri Chauraha Rampur Garden Bareilly , Uttar Pradesh
+              </span>
             </div>
             <div className="flex items-center space-x-3 text-gray-600">
               <Phone size={20} />
-              <span>+91 1234567890</span>
+              <span>+91 8171226419</span>
             </div>
             <div className="flex items-center space-x-3 text-gray-600">
               <Mail size={20} />

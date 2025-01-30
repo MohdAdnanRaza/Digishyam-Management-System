@@ -6,7 +6,7 @@ import Banner from "../Banner";
 import Footer from "../Footer";
 import ServicesModal from "../ServicesModal";
 import ClientShowcase from "./ClientShowcase";
-
+import WhyChooseDigishyam from "../WhyChooseDigishyam";
 const Mainpage = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -43,6 +43,9 @@ const Mainpage = () => {
         <ClientShowcase />
       </div>
       <div className="absolute md:absolute md:top-[402%] md:left-[1%] top-[1080%] left-[1%] w-100 md:w-10/12 lg:w-full">
+        <WhyChooseDigishyam />
+      </div>
+      <div className="absolute md:absolute md:top-[502%] md:left-[1%] top-[1400%] left-[1%] w-100 md:w-10/12 lg:w-full">
         <Footer />
       </div>
     </div>

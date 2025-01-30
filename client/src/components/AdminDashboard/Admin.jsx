@@ -55,7 +55,7 @@ import AdminNavbar from "./AdminNavbar";
 import Dashboard from "./Dashboard";
 
 const Admin = () => {
-  const [selectedPage, setSelectedPage] = useState("add-team-member");
+  const [selectedPage, setSelectedPage] = useState("");
   const navigate = useNavigate();
   const location = useLocation(); // To get the current path
 

@@ -190,11 +190,10 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="">
-      <div className="absolute -top-24 left-2.5">
-        <AdminNavbar />{" "}
-      </div>
-      <div className="h-full py-4 mt-44">
+    <div style={{ position: "absolute", top: "-1147%", left: "-817%" }}>
+      <AdminNavbar />
+
+      <div className="h-full py-4 mt-40">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
           {stats.map(({ icon, bg, label, total }, index) => (
             <div

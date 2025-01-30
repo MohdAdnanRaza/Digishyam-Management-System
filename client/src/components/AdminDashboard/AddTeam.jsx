@@ -124,7 +124,7 @@ const AddTeam = () => {
   };
 
   return (
-    <div style={{ position: "absolute", top: "-1147%", left: "-820%" }}>
+    <div style={{ position: "absolute", top: "-1147%", left: "-817%" }}>
       <AdminNavbar />
       <div>
         <ToastContainer />
