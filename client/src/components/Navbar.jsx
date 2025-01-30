@@ -15,7 +15,7 @@ import {
   useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import logo from "../assets/logo.png";
+
 const Navbar = ({ onServicesClick }) => {
   const navigate = useNavigate();
   const theme = useTheme();
@@ -34,7 +34,7 @@ const Navbar = ({ onServicesClick }) => {
           style={{ fontWeight: "bold", color: "#0056D2" }}
         >
           <img
-            src={logo} // Replace with your logo's file path
+            src="/assets/logo.png"
             alt="DigiShyam Logo"
             style={{ height: "70px", width: "auto" }} // Adjust the height as needed
           />

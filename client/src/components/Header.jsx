@@ -1,7 +1,6 @@
 import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { motion } from "framer-motion";
-import HeaderPng from "../assets/header.png";
 
 export const FadeUp = (delay) => {
   return {
@@ -61,7 +60,7 @@ const Header = () => {
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4, ease: "easeInOut" }}
-            src={HeaderPng}
+            src="/assets/header.png"
             alt="Hero Graphic"
             className="relative z-10 drop-shadow  max-w-full w-[90%] md:w-[60%] lg:w-[80%] "
           />

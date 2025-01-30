@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Typography, Box, Grid } from "@mui/material";
 import { motion } from "framer-motion";
 import { Business, Code, People } from "@mui/icons-material";
-import AboutPng from "../assets/aboutus.png";
+
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 const AboutUs = () => {
@@ -178,7 +178,7 @@ const AboutUs = () => {
                 transition={{ duration: 1.2 }}
               >
                 <img
-                  src={AboutPng}
+                  src="/assets/aboutus.png"
                   alt="Success Story"
                   style={{
                     width: "36%",

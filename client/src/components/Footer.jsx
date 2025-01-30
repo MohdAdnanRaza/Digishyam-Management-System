@@ -9,7 +9,7 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
-import logo from "../assets/logo.png";
+
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-br from-gray-100 to-gray-200 py-16">
@@ -24,7 +24,7 @@ const Footer = () => {
           <div className="space-y-6">
             {/* <h2 className="text-3xl font-bold text-primary">DigiShyam</h2> */}
             <img
-              src={logo} // Replace with your logo's file path
+              src="/assets/logo.png"
               alt="DigiShyam Logo"
               style={{ height: "70px", width: "auto" }} // Adjust the height as needed
             />

@@ -1,5 +1,5 @@
 import React from "react";
-import BannerPng from "../assets/banner.png";
+// import BannerPng from "../../public/assets/banner.png";
 import { FaServicestack } from "react-icons/fa6";
 import { FaShippingFast } from "react-icons/fa";
 import { IoIosPricetag } from "react-icons/io";
@@ -17,7 +17,7 @@ const Banner = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            src={BannerPng}
+            src="/assets/banner.png"
             alt="Digital Marketing"
             className="w-[90%] sm:w-[80%] md:max-w-[450px] object-cover drop-shadow"
           />

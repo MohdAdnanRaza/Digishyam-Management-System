@@ -7,11 +7,9 @@ import {
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup";
 import Admin from "./components/AdminDashboard/Admin";
-
 import Home from "./pages/Home";
 import AboutUs from "./components/About Us";
 import { isAuthenticated, getUserRole } from "./utils/auth";
-import Client from "./components/client";
 import AddTeam from "./components/AdminDashboard/AddTeam";
 import AddStudent from "./components/AdminDashboard/AddStudent";
 import CreateTask from "./components/AdminDashboard/Task/CreateTask";
@@ -86,7 +84,7 @@ function App() {
           path="/client"
           element={
             <ProtectedRoute roles={["admin", "staff", "client"]}>
-              <Client />
+              <Mainpage />
             </ProtectedRoute>
           }
         />
