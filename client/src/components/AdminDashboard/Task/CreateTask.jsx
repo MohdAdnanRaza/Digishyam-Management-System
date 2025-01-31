@@ -3,6 +3,7 @@ import axios from "axios";
 import AdminNavbar from "../AdminNavbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import API_BASE_URL from "../../../config";
 const CreateTask = () => {
   const [tasks, setTasks] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -23,7 +24,7 @@ const CreateTask = () => {
   // Fetch tasks
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/tasks");
+      const response = await axios.get(`${API_BASE_URL}/api/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -34,7 +35,7 @@ const CreateTask = () => {
   // Fetch employees
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/auth/team");
+      const response = await axios.get(`${API_BASE_URL}/api/auth/team`);
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -50,10 +51,7 @@ const CreateTask = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:4000/api/tasks",
-        taskForm
-      );
+      const response = await axios.post(`${API_BASE_URL}/api/tasks`, taskForm);
       setTasks((prev) => [...prev, response.data]);
       toast.success("Task created successfully!");
       setIsCreatingTask(false);
@@ -74,7 +72,7 @@ const CreateTask = () => {
     setIsAssigning(true);
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/tasks/assign/${selectedTask}`,
+        `${API_BASE_URL}/api/tasks/assign/${selectedTask}`,
         {
           userId: selectedEmployee,
         }

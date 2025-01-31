@@ -11,7 +11,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { CalendarToday, AccessTime, MoreHoriz } from "@mui/icons-material";
-
+import API_BASE_URL from "../../config";
 const GetTask = () => {
   const [tasks, setTasks] = useState([]);
   const [descriptionVisible, setDescriptionVisible] = useState({}); // State to track visibility of each task's description
@@ -26,7 +26,7 @@ const GetTask = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/tasks/user/${user._id}` // Use the correct route
+        `${API_BASE_URL}/api/tasks/user/${user._id}` // Use the correct route
       );
       setTasks(response.data);
     } catch (error) {
@@ -83,7 +83,7 @@ const GetTask = () => {
     try {
       // Send the update request to the backend
       const response = await axios.put(
-        `http://localhost:4000/api/tasks/${taskId}/stage`,
+        `${API_BASE_URL}/api/tasks/${taskId}/stage`,
         { stage: nextStage }
       );
 

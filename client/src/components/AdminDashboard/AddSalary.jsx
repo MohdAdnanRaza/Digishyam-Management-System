@@ -3,7 +3,7 @@ import axios from "axios";
 import AdminNavbar from "./AdminNavbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import API_BASE_URL from "../../config";
 const AddSalary = () => {
   const [salaries, setSalaries] = useState([]);
   const [searchName, setSearchName] = useState("");
@@ -44,7 +44,7 @@ const AddSalary = () => {
     const fetchSalaries = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/salary?month=${filterMonth}`
+          `${API_BASE_URL}/api/salary?month=${filterMonth}`
         );
         if (response.data && Array.isArray(response.data.salaries)) {
           setSalaries(response.data.salaries);
@@ -77,7 +77,7 @@ const AddSalary = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/salary/add",
+        `${API_BASE_URL}/api/salary/add`,
         salary
       );
       setSalaries([...salaries, response.data.salary]);

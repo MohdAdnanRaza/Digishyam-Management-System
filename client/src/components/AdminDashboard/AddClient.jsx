@@ -21,6 +21,7 @@ import axios from "axios";
 import AdminNavbar from "./AdminNavbar";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import API_BASE_URL from "../../config";
 const AddClient = () => {
   const [clients, setClients] = useState([]);
   const [form, setForm] = useState({
@@ -41,7 +42,7 @@ const AddClient = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/clients");
+      const response = await axios.get(`${API_BASE_URL}/api/clients`);
       setClients(response.data);
     } catch (error) {
       console.error("Error fetching clients:", error);
@@ -56,11 +57,11 @@ const AddClient = () => {
     e.preventDefault();
     try {
       if (isEdit) {
-        await axios.put(`http://localhost:4000/api/clients/${editId}`, form);
+        await axios.put(`${API_BASE_URL}api/clients/${editId}`, form);
         setIsEdit(false);
         setEditId(null);
       } else {
-        await axios.post("http://localhost:4000/api/clients", form);
+        await axios.post(`${API_BASE_URL}/api/clients`, form);
       }
       setForm({ name: "", phone: "", email: "", company: "" });
       fetchClients();
@@ -79,7 +80,7 @@ const AddClient = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/clients/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/clients/${id}`);
       fetchClients();
     } catch (error) {
       console.error("Error deleting client:", error);

@@ -28,6 +28,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AdminNavbar from "./AdminNavbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import API_BASE_URL from "../../config";
 const AddTeam = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -44,7 +45,7 @@ const AddTeam = () => {
   useEffect(() => {
     const fetchTeam = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/auth/team");
+        const response = await axios.get(`${API_BASE_URL}/api/auth/team`);
         setTeam(response.data); // Assuming response.data contains an array of team members
       } catch (error) {
         console.error(error);
@@ -77,7 +78,7 @@ const AddTeam = () => {
       if (editing) {
         // Update existing member
         const response = await axios.put(
-          `http://localhost:4000/api/auth/edit/${editing._id}`,
+          `${API_BASE_URL}/api/auth/edit/${editing._id}`,
           formData
         );
         setTeam((prev) =>
@@ -91,7 +92,7 @@ const AddTeam = () => {
       } else {
         // Add new member
         const response = await axios.post(
-          "http://localhost:4000/api/auth/signup",
+          `${API_BASE_URL}api/auth/signup`,
           formData
         );
         setTeam((prev) => [...prev, { ...formData, id: response.data._id }]);
@@ -114,7 +115,7 @@ const AddTeam = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/auth/delete/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/auth/delete/${id}`);
       setTeam((prev) => prev.filter((member) => member._id !== id));
       toast.success("Team member deleted successfully!");
     } catch (error) {

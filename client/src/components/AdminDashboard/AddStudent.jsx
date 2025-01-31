@@ -27,6 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AdminNavbar from "./AdminNavbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import API_BASE_URL from "../../config";
 const AddStudent = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -41,7 +42,7 @@ const AddStudent = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/students");
+        const response = await axios.get(`${API_BASE_URL}/api/students`);
         setStudents(response.data);
       } catch (error) {
         console.error(error);
@@ -71,10 +72,7 @@ const AddStudent = () => {
     e.preventDefault();
     try {
       if (editing) {
-        await axios.put(
-          `http://localhost:4000/api/students/${editing._id}`,
-          formData
-        );
+        await axios.put(`${API_BASE_URL}api/students/${editing._id}`, formData);
         setStudents((prev) =>
           prev.map((student) =>
             student._id === editing._id ? { ...student, ...formData } : student
@@ -83,7 +81,7 @@ const AddStudent = () => {
         toast.success("Student updated successfully!");
       } else {
         const response = await axios.post(
-          "http://localhost:4000/api/students",
+          `${API_BASE_URL}/api/students`,
           formData
         );
         setStudents((prev) => [
@@ -107,7 +105,7 @@ const AddStudent = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/students/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/students/${id}`);
       setStudents((prev) => prev.filter((student) => student._id !== id));
       toast.success("Student deleted successfully!");
     } catch (error) {

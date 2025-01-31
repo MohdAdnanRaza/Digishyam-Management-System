@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminNavbar from "./AdminNavbar";
-
+import API_BASE_URL from "../../config";
 const LeaveApproval = () => {
   const [leaves, setLeaves] = useState([]);
   const [filter, setFilter] = useState("Pending");
@@ -12,7 +12,7 @@ const LeaveApproval = () => {
   useEffect(() => {
     const fetchLeaves = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/leave/");
+        const response = await axios.get(`${API_BASE_URL}/api/leave/`);
         if (response.data.success) {
           setLeaves(response.data.leaves);
         }
@@ -27,7 +27,7 @@ const LeaveApproval = () => {
   const handleStatusChange = async (leaveId, status) => {
     try {
       const response = await axios.put(
-        "http://localhost:4000/api/leave/update-status",
+        `${API_BASE_URL}/api/leave/update-status`,
         { leaveId, status }
       );
       if (response.data.success) {

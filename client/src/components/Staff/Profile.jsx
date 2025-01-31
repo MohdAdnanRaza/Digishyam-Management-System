@@ -15,7 +15,7 @@ import {
 import axios from "axios";
 import { styled } from "@mui/system";
 import { Email, Person, Phone, Work, CalendarToday } from "@mui/icons-material";
-
+import API_BASE_URL from "../../config";
 const StyledCard = styled(Box)(({ theme }) => ({
   maxWidth: 1000,
   margin: "50px auto",
@@ -46,12 +46,9 @@ const Profile = () => {
       if (!token) return;
 
       try {
-        const { data } = await axios.get(
-          "http://localhost:4000/api/auth/profile",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const { data } = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setUserData(data);
         setFormValues({
           name: data.name,
@@ -72,7 +69,7 @@ const Profile = () => {
   const handleEditSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put("http://localhost:4000/api/auth/profile", formValues, {
+      await axios.put(`${API_BASE_URL}/api/auth/profile`, formValues, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUserData({ ...userData, ...formValues });
@@ -86,7 +83,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:4000/api/auth/reset-password",
+        `${API_BASE_URL}/api/auth/reset-password`,
         { password: newPassword },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -116,10 +113,7 @@ const Profile = () => {
     <div>
       <StyledCard>
         <Avatar
-          src={`http://localhost:4000/${userData.profilePicture.replace(
-            "\\",
-            "/"
-          )}`}
+          src={`${API_BASE_URL}/${userData.profilePicture.replace("\\", "/")}`}
           alt="Profile Photo"
           sx={{
             maxWidth: 900,

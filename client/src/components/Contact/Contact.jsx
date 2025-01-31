@@ -6,6 +6,7 @@ import Footer from "../Footer";
 import Navbar from "../Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import API_BASE_URL from "../../config";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +19,7 @@ const Contact = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4000/api/contact/submit", {
+      const response = await fetch(`${API_BASE_URL}/api/contact/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -14,7 +14,7 @@ import { Chart } from "../../components/Chart";
 import { BGS, PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../../utils/index";
 import UserInfo from "../../components/UserInfo";
 import AdminNavbar from "./AdminNavbar";
-
+import API_BASE_URL from "../../config";
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [summary, setSummary] = useState({});
@@ -29,12 +29,10 @@ const Dashboard = () => {
   // Fetch data from backend
   const fetchData = async () => {
     try {
-      const tasksResponse = await axios.get("http://localhost:4000/api/tasks");
-      const usersResponse = await axios.get(
-        "http://localhost:4000/api/auth/team"
-      );
+      const tasksResponse = await axios.get(`${API_BASE_URL}/api/tasks`);
+      const usersResponse = await axios.get(`${API_BASE_URL}/api/auth/team`);
       const summaryResponse = await axios.get(
-        "http://localhost:4000/api/tasks/summary"
+        `${API_BASE_URL}/api/tasks/summary`
       );
       console.log("Summary Response:", summaryResponse.data);
       setTasks(tasksResponse.data);

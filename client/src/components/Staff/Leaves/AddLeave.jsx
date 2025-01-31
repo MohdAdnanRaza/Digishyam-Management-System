@@ -4,7 +4,7 @@ import { useAuth } from "../../../context/ContextProvider"; // Ensure this provi
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import API_BASE_URL from "../../../config";
 const AddLeave = () => {
   const { user } = useAuth(); // Retrieve the user object from context
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ const AddLeave = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/leave/add",
+        `${API_BASE_URL}/api/leave/add`,
         leave, // Pass the updated leave object
         {
           headers: {
