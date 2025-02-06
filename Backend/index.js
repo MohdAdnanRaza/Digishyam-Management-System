@@ -20,15 +20,15 @@ const PORT = process.env.PORT || 5000;
 // Initialize Express app
 const app = express();
 app.use(express.json());
-// app.use(cors({ origin: "http://localhost:5173" }));
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://digishyam-management-system-frontend.onrender.com",
-    ],
-  })
-);
+app.use(cors({ origin: "http://localhost:5173" }));
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",
+//       "https://digishyam-management-system-frontend.onrender.com",
+//     ],
+//   })
+// );
 // MongoDB connection
 connectDB();
 

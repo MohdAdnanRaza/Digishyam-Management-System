@@ -11,16 +11,40 @@ exports.getClients = async (req, res) => {
 };
 
 // Add a new client
+
 exports.addClient = async (req, res) => {
   try {
-    const client = new Client(req.body);
+    console.log("Received Data:", req.body); //
+    const {
+      name,
+      mobile,
+      email,
+      company,
+      service,
+      totalAmount,
+      paidAmount,
+      dueAmount,
+      status,
+    } = req.body;
+
+    const client = new Client({
+      name,
+      mobile,
+      email,
+      company,
+      service,
+      totalAmount,
+      paidAmount,
+      dueAmount: dueAmount || totalAmount - paidAmount,
+      status: status || "Active",
+    });
+
     await client.save();
-    res.status(201).json({ message: "Client added successfully!" });
+    res.status(201).json({ message: "Client added successfully!", client });
   } catch (error) {
-    res.status(400).json({ message: "Error adding client" });
+    res.status(400).json({ message: "Error adding client", error });
   }
 };
-
 // Update a client
 exports.updateClient = async (req, res) => {
   try {

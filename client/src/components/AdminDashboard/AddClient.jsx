@@ -22,14 +22,19 @@ import AdminNavbar from "./AdminNavbar";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import API_BASE_URL from "../../config";
+
 const AddClient = () => {
   const [clients, setClients] = useState([]);
   const [form, setForm] = useState({
     name: "",
-    phone: "",
+    mobile: "",
     email: "",
     company: "",
     service: "",
+    totalAmount: "",
+    paidAmount: "",
+    dueAmount: "",
+    status: "Active",
   });
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -50,20 +55,50 @@ const AddClient = () => {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setForm((prevForm) => {
+      let updatedValue = value;
+      if (name === "totalAmount" || name === "paidAmount") {
+        updatedValue = value ? Number(value) : 0; // Ensure it's a number
+      }
+
+      const updatedForm = { ...prevForm, [name]: updatedValue };
+
+      // Auto-calculate dueAmount only if totalAmount and paidAmount are numbers
+      if (!isNaN(updatedForm.totalAmount) && !isNaN(updatedForm.paidAmount)) {
+        updatedForm.dueAmount = Math.max(
+          updatedForm.totalAmount - updatedForm.paidAmount,
+          0
+        );
+      }
+
+      return updatedForm;
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting Data:", form); // Debugging log
     try {
       if (isEdit) {
-        await axios.put(`${API_BASE_URL}api/clients/${editId}`, form);
+        await axios.put(`http://localhost:4000/api/clients/${editId}`, form);
         setIsEdit(false);
         setEditId(null);
       } else {
-        await axios.post(`${API_BASE_URL}/api/clients`, form);
+        await axios.post(`http://localhost:4000/api/clients`, form);
       }
-      setForm({ name: "", phone: "", email: "", company: "" });
+      setForm({
+        name: "",
+        mobile: "",
+        email: "",
+        company: "",
+        service: "",
+        totalAmount: "",
+        paidAmount: "",
+        dueAmount: "",
+        status: "Active",
+      });
       fetchClients();
       handleClose();
     } catch (error) {
@@ -88,7 +123,17 @@ const AddClient = () => {
   };
 
   const handleOpen = () => {
-    setForm({ name: "", phone: "", email: "", company: "" });
+    setForm({
+      name: "",
+      mobile: "",
+      email: "",
+      company: "",
+      service: "",
+      totalAmount: "",
+      paidAmount: "",
+      dueAmount: "",
+      status: "Active",
+    });
     setIsEdit(false);
     setOpen(true);
   };
@@ -115,13 +160,17 @@ const AddClient = () => {
           </Button>
           <TableContainer component={Paper} sx={{ mt: 3 }}>
             <Table>
-              <TableHead>
+              <TableHead sx={{ backgroundColor: "primary.main" }}>
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Mobile</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell>Services</TableCell>
                   <TableCell>Company</TableCell>
+                  <TableCell>Total Amount</TableCell>
+                  <TableCell>Paid Amount</TableCell>
+                  <TableCell>Due Amount</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -133,6 +182,10 @@ const AddClient = () => {
                     <TableCell>{client.email}</TableCell>
                     <TableCell>{client.service}</TableCell>
                     <TableCell>{client.company}</TableCell>
+                    <TableCell>{client.totalAmount}</TableCell>
+                    <TableCell>{client.paidAmount}</TableCell>
+                    <TableCell>{client.dueAmount}</TableCell>
+                    <TableCell>{client.status}</TableCell>
                     <TableCell>
                       <IconButton onClick={() => handleEdit(client)}>
                         <EditIcon />
@@ -210,6 +263,60 @@ const AddClient = () => {
                     onChange={handleChange}
                     required
                   />
+                </Box>
+                <Box mb={3}>
+                  <TextField
+                    fullWidth
+                    label="Total Amount"
+                    variant="outlined"
+                    name="totalAmount"
+                    value={form.totalAmount || ""}
+                    onChange={handleChange}
+                    required
+                    type="number"
+                  />
+                </Box>
+                <Box mb={3}>
+                  <TextField
+                    fullWidth
+                    label="Paid Amount"
+                    variant="outlined"
+                    name="paidAmount"
+                    value={form.paidAmount || ""}
+                    onChange={handleChange}
+                    required
+                    type="number"
+                  />
+                </Box>
+                <Box mb={3}>
+                  <TextField
+                    fullWidth
+                    label="Due Amount"
+                    variant="outlined"
+                    name="dueAmount"
+                    value={form.dueAmount || ""}
+                    onChange={handleChange}
+                    required
+                    disabled
+                    type="number"
+                  />
+                </Box>
+                <Box mb={3}>
+                  <TextField
+                    fullWidth
+                    label="Status"
+                    variant="outlined"
+                    name="status"
+                    value={form.status}
+                    onChange={handleChange}
+                    select
+                    SelectProps={{
+                      native: true,
+                    }}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </TextField>
                 </Box>
                 <DialogActions>
                   <Button onClick={handleClose}>Cancel</Button>
