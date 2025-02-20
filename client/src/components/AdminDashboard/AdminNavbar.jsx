@@ -166,7 +166,7 @@ const AdminNavbar = () => {
       position="relative"
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        top: "-20%",
+        top: "-25%",
         left: "-20px",
         width: "1110px",
       }}

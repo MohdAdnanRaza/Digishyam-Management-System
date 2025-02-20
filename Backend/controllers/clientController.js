@@ -25,6 +25,7 @@ exports.addClient = async (req, res) => {
       paidAmount,
       dueAmount,
       status,
+      activationDate,
     } = req.body;
 
     const client = new Client({
@@ -37,6 +38,7 @@ exports.addClient = async (req, res) => {
       paidAmount,
       dueAmount: dueAmount || totalAmount - paidAmount,
       status: status || "Active",
+      activationDate: activationDate || new Date(),
     });
 
     await client.save();
