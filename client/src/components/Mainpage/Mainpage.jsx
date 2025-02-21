@@ -15,7 +15,7 @@ const Mainpage = () => {
   };
 
   return (
-    <div>
+    <div style={{ width: "30%", margin: "0 auto" }}>
       {/* Navbar */}
       <div
         style={{

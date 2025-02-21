@@ -12,6 +12,15 @@ exports.createContact = async (req, res) => {
     const newContact = new Contact({ name, email, phone, message });
     await newContact.save();
 
+ // Send notification with full details
+ global.notifications.push({
+  name,
+  email,
+  phone,
+  message,
+  createdAt: new Date(),
+});
+
     res.status(201).json({ message: "Form submitted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to submit form" });

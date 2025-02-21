@@ -38,59 +38,41 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const colors = ["#ffcccc", "#ccffcc", "#ccccff", "#ffffcc", "#ffccff"];
+const notificationColors = [
+  "#F0F8FF",
+  "#ff7f50",
+  "#008080",
+  "#1e90ff",
+  "#7FFFD4",
+];
 
-const NotificationItem = ({ notification, index, total }) => {
-  const variants = {
-    initial: {
-      opacity: 0,
-      y: 20,
-      scale: 0.8,
-    },
-    animate: {
-      opacity: 1 - index * 0.2,
-      y: -index * (NOTIFICATION_HEIGHT + NOTIFICATION_GAP),
-      // y: -index * (NOTIFICATION_HEIGHT + NOTIFICATION_GAP),
-      scale: 1 - index * 0.05,
-      transition: {
-        type: "spring",
-        stiffness: 500,
-        damping: 30,
-        delay: index * 0.1,
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.8,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
-
+const NotificationItem = ({ notification, index }) => {
   return (
     <motion.div
-      variants={variants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 50 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
       style={{
         padding: "12px 16px",
-        backgroundColor: colors[index % colors.length],
-        color: "black",
+        backgroundColor: notificationColors[index % notificationColors.length],
+        color: "#333",
         borderRadius: "8px",
-        boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
-        // marginBottom: NOTIFICATION_GAP,
-        marginTop: 20,
-        position: "absolute",
-        top: 300,
-        zIndex: total - index,
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        marginBottom: "10px",
         cursor: "pointer",
-        width: "auto",
       }}
     >
-      <Typography variant="subtitle2">{notification.name}</Typography>
+      <Typography variant="subtitle2" fontWeight="bold">
+        {notification.name}
+      </Typography>
       <Typography variant="body2" color="text.secondary">
+        {notification.email}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {notification.phone}
+      </Typography>
+      <Typography variant="body2" color="text.primary">
         {notification.message}
       </Typography>
     </motion.div>
@@ -131,35 +113,13 @@ const AdminNavbar = () => {
 
   const handleNotificationIconClick = () =>
     setIsNotificationOpen((prev) => !prev);
-
   const handleCloseNotifications = () => {
     setUnreadCount(0);
-
     setIsNotificationOpen(false);
   };
 
   const handleHelpClick = () => setOpenHelpModal(true);
   const handleCloseHelpModal = () => setOpenHelpModal(false);
-
-  const notificationStackVariants = {
-    open: {
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-        staggerChildren: 0.1,
-      },
-    },
-    closed: {
-      y: -20,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      },
-    },
-  };
 
   return (
     <AppBar
@@ -207,23 +167,21 @@ const AdminNavbar = () => {
           <AnimatePresence>
             {isNotificationOpen && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
                 style={{
                   position: "absolute",
                   top: "64px",
                   right: "18px",
-                  width: "300px",
+                  width: "320px",
+                  backgroundColor: "#f8f9fa",
+                  borderRadius: "12px",
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+                  padding: "10px",
                   maxHeight: "500px",
-                  height: "500px",
-                  // backgroundColor: "black",
-                  backgroundColor: "#3B3B3B",
-                  borderRadius: "16px",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                  zIndex: 1200,
-                  overflow: "hidden",
+                  overflowY: "auto",
                 }}
               >
                 <Box
@@ -231,71 +189,44 @@ const AdminNavbar = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    padding: "8px 16px",
-                    backgroundColor: "lightskyblue",
+                    padding: "10px",
+                    backgroundColor: "#1976d2",
+                    borderRadius: "8px",
                   }}
                 >
-                  <Typography variant="subtitle1" sx={{ color: "black" }}>
+                  <Typography variant="subtitle1" sx={{ color: "#fff" }}>
                     Notifications
                   </Typography>
                   <IconButton size="small" onClick={handleCloseNotifications}>
-                    <Close fontSize="small" />
+                    <Close fontSize="small" sx={{ color: "#fff" }} />
                   </IconButton>
                 </Box>
 
-                <motion.div
-                  variants={notificationStackVariants}
-                  initial="closed"
-                  animate="open"
-                  style={{
-                    padding: "16px",
-                    maxHeight: "400px",
-                    overflowY: "auto",
-                  }}
-                >
-                  {notifications.length > 0 ? (
-                    notifications.map((notification, index) => (
-                      <NotificationItem
-                        key={index}
-                        notification={notification}
-                        index={index}
-                        total={notifications.length}
-                      />
-                    ))
-                  ) : (
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        textAlign: "center",
-                        color: "#757575",
-                      }}
-                    >
-                      No new notifications
-                    </Typography>
-                  )}
-                </motion.div>
+                {notifications.length > 0 ? (
+                  notifications.map((notification, index) => (
+                    <NotificationItem
+                      key={index}
+                      notification={notification}
+                      index={index}
+                    />
+                  ))
+                ) : (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      textAlign: "center",
+                      color: "#757575",
+                      marginTop: "10px",
+                    }}
+                  >
+                    No new notifications
+                  </Typography>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </Toolbar>
-
-      <Dialog open={openHelpModal} onClose={handleCloseHelpModal}>
-        <DialogTitle>
-          <HelpOutline sx={{ marginRight: 1, color: "blue" }} />
-          Developer Contact
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="h6">Name: Mohd Adnan Raza</Typography>
-          <Typography variant="body1">Contact Number: 8194078744</Typography>
-          <Typography variant="body1">
-            Email: adnankhan0704@gmail.com
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <StyledButton onClick={handleCloseHelpModal}>Close</StyledButton>
-        </DialogActions>
-      </Dialog>
     </AppBar>
   );
 };
