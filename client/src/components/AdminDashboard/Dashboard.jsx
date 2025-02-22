@@ -14,11 +14,12 @@ import { Chart } from "../../components/Chart";
 import { BGS, PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../../utils/index";
 import UserInfo from "../../components/UserInfo";
 import AdminNavbar from "./AdminNavbar";
-
+import API_BASE_URL from "../../config";
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [summary, setSummary] = useState({});
   const [users, setUsers] = useState([]);
+  const [clientsSummary, setClientsSummary] = useState({});
 
   const ICONS = {
     high: <MdKeyboardDoubleArrowUp />,
@@ -56,11 +57,12 @@ const Dashboard = () => {
 
   const TaskTable = ({ tasks }) => (
     <div className="w-full md:w-[700px] bg-white px-2 md:px-4 pt-4 pb-4 shadow-md rounded -ml-10 -mt-10">
+      <h4 className="text-lg font-semibold">Task Table</h4>
       <table className="w-full">
         <thead className="border-b border-gray-300">
           <tr className="text-black text-left">
             <th className="py-2">Task Title</th>
-            <th className="py-2">Priority</th>
+            <th className="py-2">Stage</th>
             <th className="py-2">Team</th>
             <th className="py-2 hidden md:block">Created At</th>
           </tr>
@@ -84,12 +86,10 @@ const Dashboard = () => {
               </td>
               <td className="py-2">
                 <div className="flex gap-1 items-center">
-                  <span
-                    className={clsx("text-lg", PRIOTITYSTYELS[task.priority])}
-                  >
-                    {ICONS[task.priority]}
+                  <span className={clsx("text-lg", PRIOTITYSTYELS[task.stage])}>
+                    {ICONS[task.stage]}
                   </span>
-                  <span className="capitalize">{task.priority}</span>
+                  <span className="capitalize">{task.stage}</span>
                 </div>
               </td>
               <td className="py-2">
@@ -109,7 +109,7 @@ const Dashboard = () => {
               </td>
               <td className="py-2 hidden md:block">
                 <span className="text-base text-gray-600">
-                  {moment(task.date).fromNow()}
+                  {moment(task.createdAt).fromNow()}
                 </span>
               </td>
             </tr>
@@ -119,57 +119,95 @@ const Dashboard = () => {
     </div>
   );
 
-  const UserTable = ({ users }) => (
-    <div className="w-full md:w-[350px] bg-white h-fit px-2 md:px-6 py-4 shadow-md rounded -mt-4">
-      <table className="w-full mb-5">
-        <thead className="border-b border-gray-300">
-          <tr className="text-black text-left">
-            <th className="py-2">Full Name</th>
-            <th className="py-2">Status</th>
-            <th className="py-2">Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr
-              key={index}
-              className="border-b border-gray-200 text-gray-600 hover:bg-gray-400/10"
-            >
-              <td className="py-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-violet-700">
-                    <span className="text-center">
-                      {user.name ? getInitials(user.name) : "?"}{" "}
-                      {/* Fallback if name is missing */}
-                    </span>
-                  </div>
-                  <div>
-                    <p>{user.name || "Unknown"}</p>
-                    <span className="text-xs text-black">
-                      {user.role || "No Role"}
-                    </span>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <p
-                  className={clsx(
-                    "w-fit px-3 py-1 rounded-full text-sm",
-                    user.isActive ? "bg-blue-200" : "bg-yellow-100"
-                  )}
-                >
-                  {user.isActive ? "Active" : "Disabled"}
-                </p>
-              </td>
-              <td className="py-2 text-sm">
-                {moment(user.createdAt).fromNow()}
-              </td>
+  const UserTable = () => {
+    const [statusFilter, setStatusFilter] = useState("all");
+    const [clients, setClients] = useState([]);
+
+    useEffect(() => {
+      fetchClients();
+    }, []);
+
+    const fetchClients = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/clients`);
+        setClients(response.data);
+      } catch (error) {
+        console.error("Error fetching clients:", error);
+      }
+    };
+
+    // Filter clients based on status
+    const filteredClients = clients.filter((client) =>
+      statusFilter === "all"
+        ? true
+        : statusFilter === "active"
+        ? client.status === "Active"
+        : client.status === "Inactive"
+    );
+
+    return (
+      <div className="w-full md:w-[350px] bg-white h-fit px-2 md:px-6 py-4 shadow-md rounded -mt-4">
+        <div className="flex justify-between items-center mb-4">
+          <h4 className="text-lg font-semibold">Clients</h4>
+          <select
+            className="border border-gray-300 p-1 rounded"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+
+        <table className="w-full mb-5">
+          <thead className="border-b border-gray-300">
+            <tr className="text-black text-left">
+              <th className="py-2">Full Name</th>
+              <th className="py-2">Status</th>
+              <th className="py-2">Created At</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+          </thead>
+          <tbody>
+            {filteredClients.map((client, index) => (
+              <tr
+                key={index}
+                className="border-b border-gray-200 text-gray-600 hover:bg-gray-400/10"
+              >
+                <td className="py-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-violet-700">
+                      <span className="text-center">
+                        {client.name.charAt(0)}
+                      </span>
+                    </div>
+                    <div>
+                      <p>{client.name || "Unknown"}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p
+                    className={clsx(
+                      "w-fit px-3 py-1 rounded-full text-sm",
+                      client.status === "Active"
+                        ? "bg-blue-200"
+                        : "bg-yellow-100"
+                    )}
+                  >
+                    {client.status}
+                  </p>
+                </td>
+                <td className="py-2 text-sm">
+                  {moment(client.activationDate).fromNow()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
 
   const stats = [
     {
@@ -202,7 +240,7 @@ const Dashboard = () => {
       <AdminNavbar />
 
       <div className="h-full py-4 mt-40">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
           {stats.map(({ icon, bg, label, total }, index) => (
             <div
               key={index}
