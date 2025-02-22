@@ -19,7 +19,7 @@ const signup = async (req, res) => {
       profilePicture,
     });
     await newUser.save();
-    res.status(201).json({ message: `User registered with name $(name)` });
+    res.status(201).json({ message: `User registered with name ${name}` });
   } catch (err) {
     res.status(500).json({ message: `Something went wrong` });
   }
@@ -57,7 +57,7 @@ const editUser = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "User ID is required" });
     }
-    const { name, mobile, email, role } = req.body;
+    const { name, mobile, email, role, profilePicture, joiningDate } = req.body;
 
     const validRoles = ["staff", "client", "admin"];
     if (!validRoles.includes(role)) {
@@ -66,7 +66,7 @@ const editUser = async (req, res) => {
 
     const updatedUser = await user.findByIdAndUpdate(
       id,
-      { name, mobile, email, role },
+      { name, mobile, email, role, joiningDate, profilePicture },
       { new: true } // Returns the updated document
     );
 

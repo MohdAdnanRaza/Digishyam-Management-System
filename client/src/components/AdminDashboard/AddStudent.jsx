@@ -42,7 +42,7 @@ const AddStudent = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/students`);
+        const response = await axios.get(`http://localhost:4000/api/students`);
         setStudents(response.data);
       } catch (error) {
         console.error(error);
@@ -72,7 +72,10 @@ const AddStudent = () => {
     e.preventDefault();
     try {
       if (editing) {
-        await axios.put(`${API_BASE_URL}api/students/${editing._id}`, formData);
+        await axios.put(
+          `http://localhost:4000/api/students/${editing._id}`,
+          formData
+        );
         setStudents((prev) =>
           prev.map((student) =>
             student._id === editing._id ? { ...student, ...formData } : student
@@ -81,7 +84,7 @@ const AddStudent = () => {
         toast.success("Student updated successfully!");
       } else {
         const response = await axios.post(
-          `${API_BASE_URL}/api/students`,
+          `http://localhost:4000/api/students`,
           formData
         );
         setStudents((prev) => [
@@ -105,7 +108,7 @@ const AddStudent = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/students/${id}`);
+      await axios.delete(`http://localhost:4000/api/students/${id}`);
       setStudents((prev) => prev.filter((student) => student._id !== id));
       toast.success("Student deleted successfully!");
     } catch (error) {

@@ -3,7 +3,6 @@ import { Box, CssBaseline } from "@mui/material";
 import { motion } from "framer-motion";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
-import AdminNavbar from "./AdminNavbar";
 import Dashboard from "./Dashboard";
 
 const Admin = () => {

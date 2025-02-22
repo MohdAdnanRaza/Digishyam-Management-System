@@ -57,9 +57,9 @@ router.get("/", async (req, res) => {
 router.get("/summary", async (req, res) => {
   try {
     const totalTasks = await Task.countDocuments();
-    const completedTasks = await Task.countDocuments({ stage: "completed" });
-    const inProgressTasks = await Task.countDocuments({ stage: "inProgress" });
-    const todoTasks = await Task.countDocuments({ stage: "todo" });
+    const completedTasks = await Task.countDocuments({ stage: "COMPLETED" });
+    const inProgressTasks = await Task.countDocuments({ stage: "IN PROGRESS" });
+    const todoTasks = await Task.countDocuments({ stage: "TODO" });
 
     res.status(200).json({
       totalTasks,
@@ -71,18 +71,7 @@ router.get("/summary", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-// router.put("/:taskId", async (req, res) => {
-//   try {
-//     const { taskId } = req.params;
-//     const { stage } = req.body;
 
-//     const task = await Task.findByIdAndUpdate(taskId, { stage }, { new: true });
-
-//     res.status(200).json(task);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
 router.put("/:taskId/stage", async (req, res) => {
   try {
     const { taskId } = req.params;

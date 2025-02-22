@@ -46,10 +46,15 @@ const Profile = () => {
       if (!token) return;
 
       try {
-        const { data } = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data } = await axios.get(
+          `http://localhost:4000/api/auth/profile`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setUserData(data);
+        console.log("Fetched user data:", data); // Log user data here
+        console.log("Profile Picture URL:", data.profilePicture);
         setFormValues({
           name: data.name,
           email: data.email,
@@ -69,7 +74,7 @@ const Profile = () => {
   const handleEditSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`${API_BASE_URL}/api/auth/profile`, formValues, {
+      await axios.put(`http://localhost:4000/api/auth/profile`, formValues, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUserData({ ...userData, ...formValues });
@@ -83,7 +88,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `${API_BASE_URL}/api/auth/reset-password`,
+        `http://localhost:4000/api/auth/reset-password`,
         { password: newPassword },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -113,7 +118,7 @@ const Profile = () => {
     <div>
       <StyledCard>
         <Avatar
-          src={`${API_BASE_URL}/${userData.profilePicture.replace("\\", "/")}`}
+          src={`http://localhost:4000/${userData.profilePicture}`}
           alt="Profile Photo"
           sx={{
             maxWidth: 900,
@@ -126,6 +131,7 @@ const Profile = () => {
         >
           {!userData.profilePicture && userData.name.charAt(0).toUpperCase()}
         </Avatar>
+
         <CardContent>
           <Box
             display="flex"

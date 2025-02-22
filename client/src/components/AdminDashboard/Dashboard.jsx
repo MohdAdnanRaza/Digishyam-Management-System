@@ -14,7 +14,7 @@ import { Chart } from "../../components/Chart";
 import { BGS, PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../../utils/index";
 import UserInfo from "../../components/UserInfo";
 import AdminNavbar from "./AdminNavbar";
-import API_BASE_URL from "../../config";
+
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [summary, setSummary] = useState({});
@@ -29,10 +29,17 @@ const Dashboard = () => {
   // Fetch data from backend
   const fetchData = async () => {
     try {
-      const tasksResponse = await axios.get(`${API_BASE_URL}/api/tasks`);
-      const usersResponse = await axios.get(`${API_BASE_URL}/api/auth/team`);
+      const tasksResponse = await axios.get(`http://localhost:4000/api/tasks`);
+      const usersResponse = await axios.get(
+        `http://localhost:4000/api/auth/team`
+      );
+
+      const usersData = usersResponse.data || [];
+      setUsers(
+        usersData.filter((user) => user.name && typeof user.name === "string")
+      );
       const summaryResponse = await axios.get(
-        `${API_BASE_URL}/api/tasks/summary`
+        `http://localhost:4000/api/tasks/summary`
       );
       console.log("Summary Response:", summaryResponse.data);
       setTasks(tasksResponse.data);
@@ -132,12 +139,15 @@ const Dashboard = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-violet-700">
                     <span className="text-center">
-                      {getInitials(user.name)}
+                      {user.name ? getInitials(user.name) : "?"}{" "}
+                      {/* Fallback if name is missing */}
                     </span>
                   </div>
                   <div>
-                    <p>{user.name}</p>
-                    <span className="text-xs text-black">{user.role}</span>
+                    <p>{user.name || "Unknown"}</p>
+                    <span className="text-xs text-black">
+                      {user.role || "No Role"}
+                    </span>
                   </div>
                 </div>
               </td>

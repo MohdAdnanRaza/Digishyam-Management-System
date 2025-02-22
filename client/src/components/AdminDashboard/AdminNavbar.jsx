@@ -139,7 +139,11 @@ const AdminNavbar = () => {
           Welcome {userName}
         </Typography>
         <div>
-          <IconButton color="inherit" onClick={handleProfileClick}>
+          <IconButton
+            color="inherit"
+            onClick={handleProfileClick}
+            sx={{ marginLeft: "-8%" }}
+          >
             <AccountCircle />
           </IconButton>
           <Menu

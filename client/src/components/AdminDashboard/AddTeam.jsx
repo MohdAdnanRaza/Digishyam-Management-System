@@ -28,7 +28,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AdminNavbar from "./AdminNavbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import API_BASE_URL from "../../config";
+
 const AddTeam = () => {
   const [formData, setFormData] = useState({
     name: "",
