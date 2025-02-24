@@ -54,12 +54,12 @@ const AddClient = () => {
     try {
       if (editingClient) {
         await axios.put(
-          `http://localhost:4000/api/clients/${editingClient._id}`,
+          `${API_BASE_URL}/api/clients/${editingClient._id}`,
           form
         );
         toast.success("Client updated successfully");
       } else {
-        await axios.post(`http://localhost:4000/api/clients`, form);
+        await axios.post(`${API_BASE_URL}/api/clients`, form);
         toast.success("Client added successfully");
       }
       fetchClients();

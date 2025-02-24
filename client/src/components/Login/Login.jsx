@@ -18,7 +18,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        `http://localhost:4000/api/auth/login`, // Use API_BASE_URL here
+        `${API_BASE_URL}/api/auth/login`, // Use API_BASE_URL here
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -76,9 +76,9 @@ const Login = () => {
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
-        <div className="register-link">
+        {/* <div className="register-link">
           <a href="/signup">Don't have an account? Register here</a>
-        </div>
+        </div> */}
       </div>
       <div
         style={{ position: "absolute", left: "5%", width: "60%", top: "5%" }}

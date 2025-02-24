@@ -30,17 +30,15 @@ const Dashboard = () => {
   // Fetch data from backend
   const fetchData = async () => {
     try {
-      const tasksResponse = await axios.get(`http://localhost:4000/api/tasks`);
-      const usersResponse = await axios.get(
-        `http://localhost:4000/api/auth/team`
-      );
+      const tasksResponse = await axios.get(`${API_BASE_URL}/api/tasks`);
+      const usersResponse = await axios.get(`${API_BASE_URL}/api/auth/team`);
 
       const usersData = usersResponse.data || [];
       setUsers(
         usersData.filter((user) => user.name && typeof user.name === "string")
       );
       const summaryResponse = await axios.get(
-        `http://localhost:4000/api/tasks/summary`
+        `${API_BASE_URL}/api/tasks/summary`
       );
       console.log("Summary Response:", summaryResponse.data);
       setTasks(tasksResponse.data);
