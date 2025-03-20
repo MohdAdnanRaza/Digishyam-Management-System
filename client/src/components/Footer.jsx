@@ -126,7 +126,7 @@ const Footer = () => {
             <div className="flex items-center space-x-3 text-gray-600">
               <MapPin size={30} />
               <span>
-                Dhanwantri Chauraha Rampur Garden Bareilly , Uttar Pradesh
+                Dhanwantri Chauraha Rampur Garden Bareilly ,Uttar Pradesh
               </span>
             </div>
             <div className="flex items-center space-x-3 text-gray-600">

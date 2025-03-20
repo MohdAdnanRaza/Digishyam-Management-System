@@ -7,9 +7,8 @@ import {
   FaTachometerAlt,
   FaUsers,
 } from "react-icons/fa";
-// import { useUserContext } from "../../context/ContextProvider";
+import { TbReportAnalytics } from "react-icons/tb";
 const EmployeeSidebar = () => {
-  // const { role } = useUserContext();
   return (
     <div className="bg-gray-800 text-white h-screen fixed left-0 top-0 bottom-0 space-y-2 w-64">
       <div className="bg-teal-600 h-12 flex items-center justify-center">
@@ -37,6 +36,17 @@ const EmployeeSidebar = () => {
         >
           <FaUsers />
           <span>My Profile</span>
+        </NavLink>
+        <NavLink
+          to={`report`}
+          className={({ isActive }) =>
+            `${
+              isActive ? "bg-teal-500 " : " "
+            } flex items-center space-x-4  py-2.5 px-4 rounded`
+          }
+        >
+          <TbReportAnalytics />
+          <span>Work Report</span>
         </NavLink>
         <NavLink
           to={`leave`}

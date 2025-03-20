@@ -16,10 +16,8 @@ import AddStudent from "./components/AdminDashboard/AddStudent";
 import CreateTask from "./components/AdminDashboard/Task/CreateTask";
 import LeaveApproval from "./components/AdminDashboard/LeaveApproval";
 import AddClient from "./components/AdminDashboard/AddClient";
-
 import Dashboard from "./components/AdminDashboard/Dashboard";
 import EmployeeDashboard from "./components/Staff/EmployeeDashboard";
-// import Summary from "./components/Staff/Summary";
 import Profile from "./components/Staff/Profile";
 import List from "./components/Staff/Leaves/List";
 import AddLeave from "./components/Staff/Leaves/AddLeave";
@@ -30,6 +28,7 @@ import GetTask from "./components/Staff/GetTask";
 import Mainpage from "./components/Mainpage/Mainpage";
 import TrainingPage from "./components/TrainingPage";
 import SettingsPage from "./components/Staff/SettingsPage";
+import Report from "./components/Staff/Report";
 
 const ProtectedRoute = ({ children, roles }) => {
   if (!isAuthenticated()) return <Navigate to="/login" />;
@@ -79,6 +78,7 @@ function App() {
           <Route path="leave" element={<List />} />
           <Route path="leave/add-leave" element={<AddLeave />} />
           <Route path="salary" element={<List />} />
+          <Route path="report" element={<Report />} />
           <Route path="setting" element={<SettingsPage />} />
         </Route>
         <Route

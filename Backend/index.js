@@ -12,6 +12,7 @@ const leaveRoutes = require("./routes/leaveRoutes");
 const salaryRoutes = require("./routes/salaryRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 // Load environment variables
 dotenv.config();
 
@@ -21,15 +22,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:5173",
-//       "https://digishyam-management-system-frontend.onrender.com",
-//     ],
-//   })
-// );
-// MongoDB connection
+
 connectDB();
 
 // Routes
@@ -42,7 +35,7 @@ app.use("/api/salary", salaryRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/uploads", express.static("uploads"));
-
+app.use("/api/reports", reportRoutes);
 app.get("/", (req, res) => {
   res.send("Backend is running successfully! 🚀");
 });

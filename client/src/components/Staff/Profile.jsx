@@ -47,7 +47,7 @@ const Profile = () => {
 
       try {
         const { data } = await axios.get(
-          `http://localhost:4000/api/auth/profile`,
+          `${API_BASE_URL}/api/auth/profile`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -74,7 +74,7 @@ const Profile = () => {
   const handleEditSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:4000/api/auth/profile`, formValues, {
+      await axios.put(`${API_BASE_URL}/api/auth/profile`, formValues, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUserData({ ...userData, ...formValues });
@@ -88,7 +88,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:4000/api/auth/reset-password`,
+        `${API_BASE_URL}/api/auth/reset-password`,
         { password: newPassword },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -118,7 +118,7 @@ const Profile = () => {
     <div>
       <StyledCard>
         <Avatar
-          src={`http://localhost:4000/${userData.profilePicture}`}
+          src={`${API_BASE_URL}/${userData.profilePicture}`}
           alt="Profile Photo"
           sx={{
             maxWidth: 900,
