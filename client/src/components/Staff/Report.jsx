@@ -11,32 +11,25 @@ import {
   FileText,
   FileSpreadsheet,
 } from "lucide-react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable"; // Import autoTable plugin for table generation
+
 import API_BASE_URL from "../../config";
 const Report = () => {
   const formRef = useRef(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    hours: "",
     date: new Date().toISOString().substr(0, 10),
     status: "pending",
     projectId: "",
-    priority: "medium",
     attachments: [],
   });
+  const [projects, setProjects] = useState([]);
   const [reports, setReports] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [showExportOptions, setShowExportOptions] = useState(false);
 
-  const priorityColors = {
-    low: "bg-blue-100 text-blue-800 border-blue-200",
-    medium: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    high: "bg-red-100 text-red-800 border-red-200",
-  };
   const fetchReports = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/reports`);
@@ -102,11 +95,9 @@ const Report = () => {
       setFormData({
         title: "",
         description: "",
-        hours: "",
         date: new Date().toISOString().substr(0, 10),
         status: "pending",
         projectId: "",
-        priority: "medium",
         attachments: [],
       });
 
@@ -126,14 +117,7 @@ const Report = () => {
   };
 
   const exportTableToCSV = () => {
-    const headers = [
-      "Title",
-      "Date",
-      "Hours",
-      "Project",
-      "Priority",
-      "Description",
-    ];
+    const headers = ["Title", "Date", "Client", "Description"];
     const csvRows = [headers.join(",")];
 
     reports.forEach((report) => {
@@ -141,10 +125,8 @@ const Report = () => {
         projects.find((p) => p.id === report.projectId)?.name || "";
       const values = [
         report.title,
-        report.date,
-        report.hours,
-        projectName,
-        report.priority,
+        new Date(report.date).toLocaleDateString(),
+        report.projectId,
         report.description,
       ].map((value) => `"${String(value).replace(/"/g, '""')}"`);
       csvRows.push(values.join(","));
@@ -160,44 +142,6 @@ const Report = () => {
     link.click();
     document.body.removeChild(link);
   };
-
-  const exportTableToPDF = () => {
-    const doc = new jsPDF();
-    doc.text("Work Reports", 20, 10);
-
-    const tableColumn = [
-      "Title",
-      "Date",
-      "Hours",
-      "Client",
-      "Priority",
-      "Description",
-    ];
-    const tableRows = reports.map((report) => [
-      report.title,
-      report.date,
-      report.hours,
-      report.projectId,
-      report.priority,
-      report.description,
-    ]);
-
-    console.log("jsPDF Object:", doc);
-    // Check if autoTable function exists
-    if (typeof doc.autoTable !== "function") {
-      console.error(
-        "autoTable function not found. Ensure jspdf-autotable is correctly imported."
-      );
-      return;
-    }
-    doc.autoTable({
-      head: [tableColumn],
-      body: tableRows,
-    });
-
-    doc.save("work_reports.pdf");
-  };
-
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -232,13 +176,6 @@ const Report = () => {
                   >
                     <FileSpreadsheet className="h-4 w-4 mr-2" />
                     Export as CSV
-                  </button>
-                  <button
-                    onClick={exportTableToPDF}
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                  >
-                    <FileText className="h-4 w-4 mr-2" />
-                    Export as PDF
                   </button>
                 </div>
               </div>
@@ -293,26 +230,6 @@ const Report = () => {
               className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              <div className="flex items-center">
-                <Clock className="h-4 w-4 mr-1 text-indigo-500" />
-                <span>Work Hours</span>
-              </div>
-            </label>
-            <input
-              type="number"
-              name="hours"
-              value={formData.hours}
-              onChange={handleChange}
-              required
-              min="0.5"
-              step="0.5"
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
-              placeholder="8"
-            />
-          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -329,33 +246,6 @@ const Report = () => {
               placeholder="Enter client name "
               className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Priority
-            </label>
-            <div className="flex space-x-4 mt-2">
-              {["low", "medium", "high"].map((priority) => (
-                <label
-                  key={priority}
-                  className={`flex items-center cursor-pointer px-3 py-2 rounded-md border ${
-                    formData.priority === priority
-                      ? priorityColors[priority]
-                      : "border-gray-300 hover:bg-gray-50"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="priority"
-                    value={priority}
-                    checked={formData.priority === priority}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                  />
-                  <span className="ml-2 text-sm capitalize">{priority}</span>
-                </label>
-              ))}
-            </div>
           </div>
         </div>
 
@@ -436,9 +326,7 @@ const Report = () => {
                 Title
               </th>
               <th className="border border-gray-300 px-4 py-2">Date</th>
-              <th className="border border-gray-300 px-4 py-2">Hours</th>
               <th className="border border-gray-300 px-4 py-2">Client</th>
-              <th className="border border-gray-300 px-4 py-2">Priority</th>
               <th className="border border-gray-300 px-4 py-2">Description</th>
             </tr>
           </thead>
@@ -451,20 +339,11 @@ const Report = () => {
                 <td className="border border-gray-300 px-4 py-2">
                   {report.date}
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {report.hours}
-                </td>
+
                 <td className="border border-gray-300 px-4 py-2">
                   {report.projectId}
                 </td>
-                <td
-                  className={`border border-gray-300 px-4 py-2 text-center ${
-                    priorityColors[report.priority]
-                  }`}
-                >
-                  {report.priority.charAt(0).toUpperCase() +
-                    report.priority.slice(1)}
-                </td>
+
                 <td className="border border-gray-300 px-4 py-2">
                   {report.description}
                 </td>
@@ -478,12 +357,6 @@ const Report = () => {
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
             Export CSV
-          </button>
-          <button
-            onClick={exportTableToPDF}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-          >
-            Export PDF
           </button>
         </div>
       </div>

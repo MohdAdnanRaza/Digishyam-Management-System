@@ -41,7 +41,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h2>Welcome to DigiShyam</h2>
+          <h2>Welcome to Digishyam</h2>
           <p>
             All-in-one solution for growing your business with expert Digital
             Marketing services

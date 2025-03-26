@@ -126,7 +126,15 @@ const AddStudent = () => {
             Student Management
           </Typography>
           <Button
-            sx={{ mb: 3, ml: 95, mt: -10 }}
+            sx={{
+              mb: 3,
+              ml: 95,
+              mt: -10,
+              backgroundColor: "#00897b",
+              "&:hover": {
+                backgroundColor: "#00695c", // Teal 700 for hover effect
+              },
+            }}
             variant="contained"
             color="primary"
             onClick={handleOpen}
@@ -135,7 +143,7 @@ const AddStudent = () => {
           </Button>
           <TableContainer component={Paper} sx={{ mt: 3 }}>
             <Table>
-              <TableHead sx={{ backgroundColor: "primary.main" }}>
+              <TableHead sx={{ backgroundColor: "#00897b" }}>
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Mobile</TableCell>

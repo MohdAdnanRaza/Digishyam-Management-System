@@ -5,9 +5,9 @@ const path = require("path");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname === "attachments") {
-      cb(null, "uploads/reports/");
+      cb(null, "uploads/");
     } else if (file.fieldname === "profilePicture") {
-      cb(null, "uploads/profiles/");
+      cb(null, "uploads/");
     } else {
       cb(null, "uploads/"); // Default folder
     }

@@ -137,7 +137,15 @@ const AddTeam = () => {
             variant="contained"
             color="primary"
             onClick={handleOpen}
-            sx={{ mb: 3, ml: 95, mt: -10 }}
+            sx={{
+              mb: 3,
+              ml: 95,
+              mt: -10,
+              backgroundColor: "#00897b",
+              "&:hover": {
+                backgroundColor: "#00695c", // Teal 700 for hover effect
+              },
+            }}
           >
             Add New Employee
           </Button>
@@ -145,7 +153,7 @@ const AddTeam = () => {
           {/* Team Table */}
           <TableContainer component={Paper}>
             <Table>
-              <TableHead sx={{ backgroundColor: "primary.main" }}>
+              <TableHead sx={{ backgroundColor: "#00897b" }}>
                 <TableRow>
                   <TableCell>Profile</TableCell>
                   <TableCell>Name</TableCell>

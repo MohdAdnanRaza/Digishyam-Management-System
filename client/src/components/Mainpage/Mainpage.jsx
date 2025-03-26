@@ -35,13 +35,13 @@ const Mainpage = () => {
 
       {/* Services Modal */}
       <ServicesModal open={modalOpen} onClose={handleModalToggle} />
-      <div className="absolute md:absolute md:top-[84%] md:left-[6%] top-[128%] left-[1%]">
+      <div className="absolute md:absolute md:top-[84%] md:left-[6%] top-[138%] left-[10%]">
         <Services />
       </div>
-      <div className="absolute md:absolute md:top-[190%] md:left-[1%] top-[550%] left-[1%]">
+      <div className="absolute md:absolute md:top-[190%] md:left-[1%] top-[558%] left-[1%]">
         <Banner />
       </div>
-      <div className="absolute md:absolute md:top-[300%] md:left-0 top-[720%] left-[12%] w-100 md:w-10/12 lg:w-full">
+      <div className="absolute md:absolute md:top-[300%] md:left-0 top-[728%] left-[18%] w-100 md:w-10/12 lg:w-full">
         <ClientShowcase />
       </div>
       <div className="absolute md:absolute md:top-[402%] md:left-[1%] top-[932%] left-[1%] w-100 md:w-10/12 lg:w-full">

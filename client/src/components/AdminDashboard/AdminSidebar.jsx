@@ -57,8 +57,7 @@ const AdminSidebar = ({ selectedPage, onClick }) => {
             onClick={() => onClick(item.route)}
             sx={{
               mb: 1,
-              bgcolor:
-                selectedPage === item.route ? "primary.light" : "transparent",
+              bgcolor: selectedPage === item.route ? "#00897b" : "transparent",
               color:
                 selectedPage === item.route
                   ? "primary.contrastText"

@@ -24,6 +24,8 @@ import { Bell, Moon, Sun, User, Shield, Lock, Camera } from "lucide-react";
 import { Label } from "@mui/icons-material";
 import { useAuth } from "../../context/ContextProvider"; // Assuming the user context is set
 import API_BASE_URL from "../../config";
+import axios from "axios";
+import { toast } from "react-toastify";
 const SettingsPage = () => {
   const { user, login } = useAuth(); // Get user from context
   const [activeTab, setActiveTab] = useState(0);
@@ -40,7 +42,7 @@ const SettingsPage = () => {
     language: "english",
     privacy: "friends",
     twoFactorEnabled: false,
-    avatarUrl: "",
+    profilePicture: user?.profilePicture || "",
   });
 
   useEffect(() => {
@@ -55,7 +57,7 @@ const SettingsPage = () => {
         language: user.language,
         privacy: user.privacy,
         twoFactorEnabled: user.twoFactorEnabled,
-        avatarUrl: user.avatarUrl,
+        profilePicture: user.avatarUrl,
       });
     }
   }, [user]);
@@ -165,27 +167,45 @@ const SettingsPage = () => {
             <CardContent>
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
                 <Avatar
-                  src={values.avatarUrl}
+                  src={values.profilePicture}
                   alt={values.name}
                   sx={{ width: 64, height: 64 }}
                 />
-                <Button
-                  variant="outlined"
-                  component="label"
-                  startIcon={<Camera />}
-                  sx={{ ml: 2 }}
-                >
-                  Change Avatar
+                <Button variant="contained" component="label">
+                  Upload Profile Picture
                   <input
                     type="file"
                     hidden
-                    onChange={(e) =>
-                      setValues((prev) => ({
-                        ...prev,
-                        avatarUrl: URL.createObjectURL(e.target.files[0]),
-                      }))
-                    }
-                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      const formData = new FormData();
+                      formData.append("profilePicture", file);
+                      axios
+                        .post(
+                          `${API_BASE_URL}/api/auth/upload-profile-picture/${user._id}`,
+                          formData,
+                          {
+                            headers: { "Content-Type": "multipart/form-data" },
+                          }
+                        )
+                        .then((response) => {
+                          const updatedUser = {
+                            ...user,
+                            profilePicture: response.data.filePath,
+                          };
+                          login(updatedUser); // Update user in context
+                          setValues((prev) => ({
+                            ...prev,
+                            profilePicture: response.data.filePath,
+                          }));
+                          toast.success(
+                            "Profile picture updated successfully!"
+                          );
+                        })
+                        .catch((error) => {
+                          toast.error("Error uploading profile picture");
+                        });
+                    }}
                   />
                 </Button>
               </Box>

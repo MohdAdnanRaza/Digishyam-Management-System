@@ -125,7 +125,8 @@ const AdminNavbar = () => {
     <AppBar
       position="relative"
       sx={{
-        zIndex: (theme) => theme.zIndex.drawer + 1,
+        // zIndex: (theme) => theme.zIndex.drawer + 1,
+        backgroundColor: "#00897b", // Teal 600
         top: "-25%",
         left: "-20px",
         width: "1110px",
@@ -133,10 +134,16 @@ const AdminNavbar = () => {
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h6">
-          {userRole === "admin" ? "Admin Dashboard" : "Employee Dashboard"}
+          {userRole === "admin" ? "Dashboard" : "Employee Dashboard"}
         </Typography>
-        <Typography variant="subtitle1" sx={{ marginRight: 2 }}>
-          Welcome {userName}
+        <Typography
+          variant="subtitle1"
+          sx={{
+            marginRight: -2,
+            fontWeight: "bold",
+          }}
+        >
+          Welcome, {userName}
         </Typography>
         <div>
           <IconButton

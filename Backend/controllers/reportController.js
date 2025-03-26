@@ -4,18 +4,14 @@ const Report = require("../models/reportModel");
 // @route POST /api/reports
 exports.createReport = async (req, res) => {
   try {
-    const { title, description, hours, date, status, projectId, priority } =
-      req.body;
+    const { title, description, date, projectId } = req.body;
     const attachments = req.files ? req.files.map((file) => file.path) : [];
 
     const report = new Report({
       title,
       description,
-      hours,
       date,
-      status,
       projectId,
-      priority,
       attachments,
     });
 

@@ -102,7 +102,7 @@ const CreateTask = () => {
       <AdminNavbar />
       <ToastContainer />
       <div className="min-h-screen min-w-screen bg-gray-100 p-6 flex flex-col items-center -ml-5">
-        <h1 className="text-3xl font-bold mb-6 text-blue-700">
+        <h1 className="text-3xl font-bold mb-6 text-teal-700">
           Task Management
         </h1>
 
@@ -117,7 +117,7 @@ const CreateTask = () => {
           {/* Assign Task Button */}
           <button
             onClick={() => setIsAssigningTask(!isAssigningTask)}
-            className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+            className="ml-4 px-4 py-2 bg-teal-500 text-white rounded-md"
           >
             {isAssigningTask ? "Close Assign Task Form" : "Assign Task"}
           </button>
@@ -166,7 +166,7 @@ const CreateTask = () => {
             </select>
             <button
               onClick={createTask}
-              className="w-full bg-blue-500 text-white py-2 rounded"
+              className="w-full bg-teal-500 text-white py-2 rounded"
             >
               Create Task
             </button>
@@ -220,7 +220,7 @@ const CreateTask = () => {
           <h2 className="text-xl font-semibold mb-4">Task List</h2>
           <table className="w-full table-fixed border-collapse border border-gray-300">
             <thead>
-              <tr className=" bg-blue-700">
+              <tr className=" bg-teal-600">
                 <th className="py-2 px-4 border border-gray-300 ">S.No</th>
                 <th className="border border-gray-300 px-4 py-2">Title</th>
                 <th className="border border-gray-300 px-4 py-2">Priority</th>
@@ -249,13 +249,20 @@ const CreateTask = () => {
                   <td className="border border-gray-300 px-4 py-2">
                     {task.stage}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  {/* <td className="border border-gray-300 px-4 py-2">
                     {task.team.length > 0
                       ? task.team.map((employee) => (
                           <span key={employee._id}>
                             {employee.name || "Unknown"}
                           </span>
                         ))
+                      : "Not Assigned"}
+                  </td> */}
+                  <td className="border border-gray-300 px-4 py-2">
+                    {task.team.length > 0
+                      ? task.team
+                          .map((employee) => employee.name || "Unknown")
+                          .join("/")
                       : "Not Assigned"}
                   </td>
                 </tr>
