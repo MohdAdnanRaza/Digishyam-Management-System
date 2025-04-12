@@ -193,6 +193,7 @@ const AdminNavbar = () => {
                   padding: "10px",
                   maxHeight: "500px",
                   overflowY: "auto",
+                  zIndex: 1500,
                 }}
               >
                 <Box
