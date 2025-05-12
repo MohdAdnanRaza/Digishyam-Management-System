@@ -143,7 +143,7 @@ const AdminNavbar = () => {
             fontWeight: "bold",
           }}
         >
-          Welcome, {userName}
+          Welcome, Digishyam
         </Typography>
         <div>
           <IconButton
